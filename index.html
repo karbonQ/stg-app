@@ -36,6 +36,12 @@
     <hr>
 
     <select id="traineeSelect"></select>
+    <div class="edit-section">
+    <input type="text" id="editNameInput" placeholder="الاسم الجديد">
+    <button onclick="editTrainee()">✏️ تعديل الاسم</button>
+    <button class="deleteBtn" onclick="deleteTrainee()">🗑 حذف المتربص</button>
+</div>
+
 
     <div class="actions">
         <button class="presentBtn" onclick="markAttendance('حاضر')">حاضر</button>
@@ -51,3 +57,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
