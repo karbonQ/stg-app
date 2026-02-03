@@ -1,7 +1,6 @@
 <div class="container">
     <h1>📋 تسجيل الحضور</h1>
     <p class="subtitle">تخصص: تلقين الإعلام الآلي</p>
-
     <!-- الإحصائيات -->
     <div class="stats">
         <div class="stat presentStat">
@@ -20,58 +19,14 @@
 
     <input type="text" id="nameInput" placeholder="اسم المتربص">
     <button onclick="addTrainee()">إضافة المتربص</button>
-
     <hr>
-
     <select id="traineeSelect"></select>
-
     <div class="actions">
         <button class="presentBtn" onclick="markAttendance('حاضر')">حاضر</button>
         <button class="absentBtn" onclick="markAttendance('غائب')">غائب</button>
     </div>
-
     <button onclick="exportToExcel()">📤 تصدير إلى Excel</button>
-
     <ul id="history"></ul>
-</div>
-
-<div class="container">
-    <h1>📋 تسجيل الحضور</h1>
-    <p class="subtitle">تخصص: تلقين الإعلام الآلي</p>
-
-    <!-- الإحصائيات -->
-    <div class="stats">
-        <div class="stat presentStat">
-            <span id="presentCount">0</span>
-            <small>حضور</small>
-        </div>
-        <div class="stat absentStat">
-            <span id="absentCount">0</span>
-            <small>غياب</small>
-        </div>
-        <div class="stat totalStat">
-            <span id="attendanceRate">0%</span>
-            <small>نسبة الحضور</small>
-        </div>
-    </div>
-
-    <input type="text" id="nameInput" placeholder="اسم المتربص">
-    <button onclick="addTrainee()">إضافة المتربص</button>
-
-    <hr>
-
-    <select id="traineeSelect"></select>
-
-    <div class="actions">
-        <button class="presentBtn" onclick="markAttendance('حاضر')">حاضر</button>
-        <button class="absentBtn" onclick="markAttendance('غائب')">غائب</button>
-    </div>
-
-    <button onclick="exportToExcel()">📤 تصدير إلى Excel</button>
-
-    <ul id="history"></ul>
-</div>
-
 <head>
     <meta charset="UTF-8">
     <title>تسجيل الحضور</title>
@@ -81,6 +36,7 @@
 </head>
 
 <link rel="stylesheet" href="style.css">
+
 
 
 
