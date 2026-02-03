@@ -1,4 +1,4 @@
-body {
+body 
     font-family: Arial, sans-serif;
     background: #f0f2f5;
     margin: 0;
@@ -16,13 +16,15 @@ body {
 }
 
 h1 {
-    line-height: 1.5;
+    line-height: 1.2;
     margin-bottom: 5px;
 }
 
 .subtitle {
-   margin-top: 0;
+     font-size: 14px;
+    margin-top: 0;        /* إلغاء الفراغ العلوي */
     line-height: 1.2;
+    color: #666;
 }
 
 .stats {
@@ -95,6 +97,7 @@ button:hover {
     display: flex;
     justify-content: space-between;
 }
+
 
 
 
