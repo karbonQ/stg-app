@@ -93,8 +93,45 @@ function exportToCSV() {
     link.click();
     document.body.removeChild(link);
 }
+function editTrainee() {
+    const select = document.getElementById("traineeSelect");
+    const oldName = select.value;
+    const newName = document.getElementById("editNameInput").value.trim();
+
+    if (!oldName || newName === "" || trainees.includes(newName)) return;
+
+    const index = trainees.indexOf(oldName);
+    trainees[index] = newName;
+
+    records.forEach(r => {
+        if (r.name === oldName) {
+            r.name = newName;
+        }
+    });
+
+    document.getElementById("editNameInput").value = "";
+    save();
+    renderSelect();
+    renderHistory();
+}
+function deleteTrainee() {
+    const name = document.getElementById("traineeSelect").value;
+    if (!name) return;
+
+    if (!confirm(`هل أنت متأكد من حذف ${name}؟`)) return;
+
+    trainees = trainees.filter(t => t !== name);
+    records = records.filter(r => r.name !== name);
+
+    save();
+    renderSelect();
+    renderHistory();
+    updateStats();
+}
+
 
 renderSelect();
 renderHistory();
 updateStats();
+
 
