@@ -1,6 +1,19 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الحضور</title>
+
+    <!-- ربط ملف CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
 <div class="container">
     <h1>📋 تسجيل الحضور</h1>
     <p class="subtitle">تخصص: تلقين الإعلام الآلي</p>
+
     <!-- الإحصائيات -->
     <div class="stats">
         <div class="stat presentStat">
@@ -19,26 +32,22 @@
 
     <input type="text" id="nameInput" placeholder="اسم المتربص">
     <button onclick="addTrainee()">إضافة المتربص</button>
+
     <hr>
+
     <select id="traineeSelect"></select>
+
     <div class="actions">
         <button class="presentBtn" onclick="markAttendance('حاضر')">حاضر</button>
         <button class="absentBtn" onclick="markAttendance('غائب')">غائب</button>
     </div>
-    <button onclick="exportToExcel()">📤 تصدير إلى Excel</button>
+
+    <!-- استعمل CSV هنا لأنه يعمل دائمًا -->
+    <button onclick="exportToCSV()">📤 تصدير إلى CSV</button>
+
     <ul id="history"></ul>
-<head>
-    <meta charset="UTF-8">
-    <title>تسجيل الحضور</title>
+</div>
 
-    <!-- ربط ملف CSS -->
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<link rel="stylesheet" href="style.css">
-
-
-
-
-
-
+<script src="script.js"></script>
+</body>
+</html>
