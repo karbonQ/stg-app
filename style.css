@@ -16,6 +16,7 @@ body {
 }
 
 h1 {
+    line-height: 1.1;
     margin-bottom: 5px;
 }
 
@@ -94,3 +95,4 @@ button:hover {
     display: flex;
     justify-content: space-between;
 }
+
