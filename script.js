@@ -53,7 +53,9 @@ function markAttendance(status) {
         return;
     }
 
-    const selectedDate = new Date(dateInput).toLocaleDateString();
+    // تحويل التاريخ إلى تنسيق اليوم/الشهر/السنة
+    const dateParts = dateInput.split("-");
+    const selectedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
 
     // التحقق إذا تم تسجيل المتربص في نفس التاريخ
     const alreadyMarked = records.some(r => r.name === name && r.date === selectedDate);
@@ -155,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderHistory();
     updateStats();
 });
+
 
 
 
