@@ -94,3 +94,7 @@ function exportToCSV() {
     document.body.removeChild(link);
 }
 
+renderSelect();
+renderHistory();
+updateStats();
+
