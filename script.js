@@ -157,6 +157,17 @@ document.addEventListener("DOMContentLoaded", () => {
     renderHistory();
     updateStats();
 });
+document.addEventListener("DOMContentLoaded", () => {
+    // تعيين اليوم الحالي كقيمة افتراضية لحقل التاريخ
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById("attendanceDate").value = today;
+
+    renderSelect();
+    renderHistory();
+    updateStats();
+});
+
+
 
 
 
