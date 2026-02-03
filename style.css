@@ -15,7 +15,7 @@ body
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-h2 {
+h1 {
     font-size: 22px;      /* مناسب للهاتف */
     line-height: 1.1;     /* تقليل التباعد بين الأسطر */
     margin-bottom: 4px;
@@ -27,7 +27,11 @@ h2 {
     line-height: 1.2;
     color: #666;
 }
-
+h2 {
+    font-size: 22px;      /* مناسب للهاتف */
+    line-height: 1.2;     /* تقليل التباعد بين الأسطر */
+    margin-bottom: 4px;
+}
 .stats {
     display: flex;
     justify-content: space-between;
@@ -98,6 +102,7 @@ button:hover {
     display: flex;
     justify-content: space-between;
 }
+
 
 
 
