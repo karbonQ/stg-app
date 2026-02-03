@@ -228,3 +228,4 @@ function exportToExcel() {
 
     XLSX.writeFile(workbook, "attendance.xlsx");
 }
+
