@@ -21,8 +21,8 @@ h1 {
 }
 
 .subtitle {
-    color: #555;
-    margin-bottom: 20px;
+   margin-top: 0;
+    line-height: 1.2;
 }
 
 .stats {
@@ -95,4 +95,5 @@ button:hover {
     display: flex;
     justify-content: space-between;
 }
+
 
