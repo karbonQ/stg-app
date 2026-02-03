@@ -83,7 +83,7 @@ function exportToCSV() {
         csvContent += `"${r.name}","${r.status}","${r.date}"\n`;
     });
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
@@ -148,6 +148,7 @@ function deleteTrainee() {
     renderHistory();
     updateStats();
 }
+
 
 
 
