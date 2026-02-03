@@ -15,7 +15,7 @@ body
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-h1 {
+h2 {
     font-size: 22px;      /* مناسب للهاتف */
     line-height: 1.1;     /* تقليل التباعد بين الأسطر */
     margin-bottom: 4px;
@@ -98,6 +98,7 @@ button:hover {
     display: flex;
     justify-content: space-between;
 }
+
 
 
 
