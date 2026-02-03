@@ -228,4 +228,15 @@ function exportToExcel() {
 
     XLSX.writeFile(workbook, "attendance.xlsx");
 }
+.edit-section {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.deleteBtn {
+    background: #e63946;
+    color: white;
+}
+
 
