@@ -46,30 +46,31 @@ function markAttendance(status) {
         return;
     }
 
-    // قراءة التاريخ من الحقل
+    // قراءة التاريخ مباشرة من حقل التاريخ
     const dateInput = document.getElementById("attendanceDate").value;
     if (!dateInput) {
         alert("اختر تاريخ تسجيل الغياب/الحضور أولًا");
         return;
     }
 
-    // تحويل التاريخ إلى تنسيق اليوم/الشهر/السنة
-    const dateParts = dateInput.split("-");
-    const selectedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+    // استخدام التاريخ كما هو (YYYY-MM-DD) أو تحويله لعرض DD/MM/YYYY
+    const parts = dateInput.split("-");
+    const selectedDate = `${parts[2]}/${parts[1]}/${parts[0]}`; // يوم/شهر/سنة
 
-    // التحقق إذا تم تسجيل المتربص في نفس التاريخ
+    // منع التسجيل المكرر لنفس الشخص في نفس التاريخ
     const alreadyMarked = records.some(r => r.name === name && r.date === selectedDate);
     if (alreadyMarked) {
         alert(`تم تسجيل هذا المتربص بالفعل بتاريخ ${selectedDate}`);
         return;
     }
 
-    // تسجيل الحضور أو الغياب
+    // تسجيل الحضور/الغياب مع التاريخ المختار
     records.push({ name, status, date: selectedDate });
     save();
     renderHistory();
     updateStats();
 }
+
 
 
 // عرض السجل
@@ -166,6 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderHistory();
     updateStats();
 });
+
 
 
 
