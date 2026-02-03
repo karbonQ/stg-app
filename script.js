@@ -98,27 +98,47 @@ function editTrainee() {
     const oldName = select.value;
     const newName = document.getElementById("editNameInput").value.trim();
 
-    if (!oldName || newName === "" || trainees.includes(newName)) return;
+    if (!oldName) {
+        alert("اختر متربصًا أولًا");
+        return;
+    }
 
-    const index = trainees.indexOf(oldName);
-    trainees[index] = newName;
+    if (newName === "") {
+        alert("أدخل الاسم الجديد");
+        return;
+    }
 
-    records.forEach(r => {
+    if (trainees.includes(newName)) {
+        alert("هذا الاسم موجود مسبقًا");
+        return;
+    }
+
+    trainees = trainees.map(t => t === oldName ? newName : t);
+
+    records = records.map(r => {
         if (r.name === oldName) {
-            r.name = newName;
+            return { ...r, name: newName };
         }
+        return r;
     });
 
     document.getElementById("editNameInput").value = "";
     save();
     renderSelect();
     renderHistory();
+    updateStats();
 }
-function deleteTrainee() {
-    const name = document.getElementById("traineeSelect").value;
-    if (!name) return;
 
-    if (!confirm(`هل أنت متأكد من حذف ${name}؟`)) return;
+function deleteTrainee() {
+    const select = document.getElementById("traineeSelect");
+    const name = select.value;
+
+    if (!name) {
+        alert("اختر متربصًا للحذف");
+        return;
+    }
+
+    if (!confirm(`هل تريد حذف ${name} نهائيًا؟`)) return;
 
     trainees = trainees.filter(t => t !== name);
     records = records.filter(r => r.name !== name);
@@ -130,8 +150,5 @@ function deleteTrainee() {
 }
 
 
-renderSelect();
-renderHistory();
-updateStats();
 
 
