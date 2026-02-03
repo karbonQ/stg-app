@@ -41,20 +41,34 @@ function renderSelect() {
 function markAttendance(status) {
     const select = document.getElementById("traineeSelect");
     const name = select.value;
-    if (!name) return;
-
-    const today = new Date().toLocaleDateString();
-    const alreadyMarked = records.some(r => r.name === name && r.date === today);
-    if (alreadyMarked) {
-        alert("تم تسجيل هذا المتربص اليوم بالفعل");
+    if (!name) {
+        alert("اختر المتربص أولًا");
         return;
     }
 
-    records.push({ name, status, date: today });
+    // قراءة التاريخ من الحقل
+    const dateInput = document.getElementById("attendanceDate").value;
+    if (!dateInput) {
+        alert("اختر تاريخ تسجيل الغياب/الحضور أولًا");
+        return;
+    }
+
+    const selectedDate = new Date(dateInput).toLocaleDateString();
+
+    // التحقق إذا تم تسجيل المتربص في نفس التاريخ
+    const alreadyMarked = records.some(r => r.name === name && r.date === selectedDate);
+    if (alreadyMarked) {
+        alert(`تم تسجيل هذا المتربص بالفعل بتاريخ ${selectedDate}`);
+        return;
+    }
+
+    // تسجيل الحضور أو الغياب
+    records.push({ name, status, date: selectedDate });
     save();
     renderHistory();
     updateStats();
 }
+
 
 // عرض السجل
 function renderHistory() {
@@ -134,7 +148,14 @@ function exportToCSV() {
 
 // استدعاء كل شيء بعد تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById("attendanceDate").value = today;
+
     renderSelect();
     renderHistory();
     updateStats();
 });
+
+
+
+
