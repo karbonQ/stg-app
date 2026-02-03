@@ -3,18 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>تسجيل الحضور</title>
-
-    <!-- ربط ملف CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="container">
-     <h1>  الجمهورية الجزائرية الديمقراطية الشعبية</h1>
-     <h2> وزارة التكوين و التعليم المهنيين</h2>
-         <h1> مركز التكوين المهني الشهيد أحمد زبانة السوقر1</h1>
-    <h1> تسجيل الحضور</h1>
+    <h1>📋 تسجيل الحضور</h1>
     <p class="subtitle">تخصص: تلقين الإعلام الآلي</p>
 
     <!-- الإحصائيات -->
@@ -33,25 +27,29 @@
         </div>
     </div>
 
+    <!-- إضافة متربص -->
     <input type="text" id="nameInput" placeholder="اسم المتربص">
     <button onclick="addTrainee()">إضافة المتربص</button>
 
     <hr>
 
+    <!-- قائمة المتربصين -->
     <select id="traineeSelect"></select>
+
+    <!-- تعديل وحذف -->
     <div class="edit-section">
-    <input type="text" id="editNameInput" placeholder="الاسم الجديد">
-    <button onclick="editTrainee()">✏️ تعديل الاسم</button>
-    <button class="deleteBtn" onclick="deleteTrainee()">🗑 حذف المتربص</button>
-</div>
+        <input type="text" id="editNameInput" placeholder="الاسم الجديد">
+        <button onclick="editTrainee()">✏️ تعديل الاسم</button>
+        <button onclick="deleteTrainee()">🗑 حذف المتربص</button>
+    </div>
 
-
+    <!-- حضور/غياب -->
     <div class="actions">
         <button class="presentBtn" onclick="markAttendance('حاضر')">حاضر</button>
         <button class="absentBtn" onclick="markAttendance('غائب')">غائب</button>
     </div>
 
-    <!-- استعمل CSV هنا لأنه يعمل دائمًا -->
+    <!-- تصدير CSV -->
     <button onclick="exportToCSV()">📤 تصدير إلى CSV</button>
 
     <ul id="history"></ul>
@@ -60,8 +58,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
