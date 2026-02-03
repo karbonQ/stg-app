@@ -16,8 +16,9 @@ body
 }
 
 h1 {
-    line-height: 1.2;
-    margin-bottom: 5px;
+    font-size: 22px;      /* مناسب للهاتف */
+    line-height: 1.1;     /* تقليل التباعد بين الأسطر */
+    margin-bottom: 4px;
 }
 
 .subtitle {
@@ -97,6 +98,7 @@ button:hover {
     display: flex;
     justify-content: space-between;
 }
+
 
 
 
