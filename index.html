@@ -12,69 +12,39 @@
 
 <body>
 
-<div class="container">
-    <h1>الجمهورية الجزائرية الديمقراطية الشعبية</h1>
-    <h2>وزارة التكوين و التعليم المهنيين </h2>
-    <h3>مركز التكوين و التمهين الشهيد أحمد زبانة السوقر1 </h3>
-    <h3> تسجيل الحضور </h3>
-    <p class="subtitle">تخصص: تلقين الإعلام الآلي</p>
+<div class="app">
 
-    <!-- الإحصائيات -->
-    <div class="stats">
-        <div class="stat presentStat">
-            <span id="presentCount">0</span>
-            <small>حضور</small>
-        </div>
-        <div class="stat absentStat">
-            <span id="absentCount">0</span>
-            <small>غياب</small>
-        </div>
-        <div class="stat totalStat">
-            <span id="attendanceRate">0%</span>
-            <small>نسبة الحضور</small>
-        </div>
+    <div class="header">
+        <h1>📋 تسجيل الحضور</h1>
+        <p class="subtitle">تخصص: تلقين الإعلام الآلي</p>
     </div>
 
-    <!-- إضافة متربص -->
+    <label>اختر تاريخ التسجيل:</label>
+    <input type="date" id="attendanceDate">
+
+    <div class="stats">
+        <div class="stat"><span id="presentCount">0</span><small>حضور</small></div>
+        <div class="stat"><span id="absentCount">0</span><small>غياب</small></div>
+        <div class="stat"><span id="attendanceRate">0%</span><small>النسبة</small></div>
+    </div>
+
     <input type="text" id="nameInput" placeholder="اسم المتربص">
-    <button onclick="addTrainee()">إضافة المتربص</button>
+    <button onclick="addTrainee()">➕ إضافة</button>
 
-    <hr>
-
-    <!-- قائمة المتربصين -->
     <select id="traineeSelect"></select>
 
-    <!-- تعديل وحذف -->
-    <div class="edit-section">
-        <input type="text" id="editNameInput" placeholder="الاسم الجديد">
-        <button onclick="editTrainee()">✏️ تعديل الاسم</button>
-        <button onclick="deleteTrainee()">🗑 حذف المتربص</button>
-    </div>
+    <button class="present" onclick="markAttendance('حاضر')">✔ حاضر</button>
+    <button class="absent" onclick="markAttendance('غائب')">✖ غائب</button>
 
-    <!-- حضور/غياب -->
-    
-  <label for="attendanceDate">اختر تاريخ التسجيل:</label>
-<input type="date" id="attendanceDate">
+    <button onclick="editTrainee()">✏️ تعديل الاسم</button>
+    <button onclick="deleteTrainee()">🗑 حذف المتربص</button>
 
-
-    <div class="actions">
-        <button class="presentBtn" onclick="markAttendance('حاضر')">حاضر</button>
-        <button class="absentBtn" onclick="markAttendance('غائب')">غائب</button>
-    </div>
-
-    <!-- تصدير CSV -->
     <button onclick="exportToCSV()">📤 تصدير إلى CSV</button>
 
     <ul id="history"></ul>
+
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
