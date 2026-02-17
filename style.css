@@ -33,7 +33,7 @@ h1 {
 }
 h2 {
     margin: 0;
-    font-size: 30px;
+    font-size: 20px;
 }
 
 .subtitle {
@@ -130,6 +130,7 @@ li {
 /* حدود الحالة */
 li.present { border-right: 4px solid #22c55e; }
 li.absent  { border-right: 4px solid #ef4444; }
+
 
 
 
