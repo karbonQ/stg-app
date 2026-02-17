@@ -27,13 +27,9 @@ body {
     margin-bottom: 12px;
 }
 
-h1 {
-    margin: 0;
-    font-size: 5px;
-}
 h2 {
     margin: 0;
-    font-size: 20px;
+    font-size: 10px;
 }
 
 .subtitle {
@@ -130,6 +126,7 @@ li {
 /* حدود الحالة */
 li.present { border-right: 4px solid #22c55e; }
 li.absent  { border-right: 4px solid #ef4444; }
+
 
 
 
