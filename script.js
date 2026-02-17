@@ -49,7 +49,10 @@ function markAttendance(status) {
     if (!name) return alert("اختر المتربص");
     if (!date) return alert("اختر التاريخ");
 
-    records.push({ name, status, date });
+    // حفظ التاريخ دائمًا بصيغة YYYY-MM-DD
+    const formattedDate = new Date(date).toISOString().split('T')[0];
+
+    records.push({ name, status, date: formattedDate });
     save();
     renderHistory();
     updateStats();
@@ -135,10 +138,7 @@ function renderSummaryLists() {
 
     const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
 
-    const todayRecords = records.filter(r => {
-        const recordDate = new Date(r.date).toISOString().split('T')[0];
-        return recordDate === formattedDate;
-    });
+    const todayRecords = records.filter(r => r.date === formattedDate);
 
     todayRecords.forEach(r => {
         const li = document.createElement("li");
@@ -177,20 +177,12 @@ function exportToCSV() {
 /* مسح سجل اليوم */
 function clearTodayRecords() {
     const selectedDate = attendanceDate.value;
-
-    if (!selectedDate) {
-        alert("اختر التاريخ أولاً");
-        return;
-    }
-
+    if (!selectedDate) { alert("اختر التاريخ أولاً"); return; }
     if (!confirm("هل أنت متأكد من مسح سجلات هذا اليوم فقط؟")) return;
 
     const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
 
-    records = records.filter(r => {
-        const recordDate = new Date(r.date).toISOString().split('T')[0];
-        return recordDate !== formattedDate;
-    });
+    records = records.filter(r => r.date !== formattedDate);
 
     save();
     renderHistory();
@@ -204,12 +196,3 @@ renderSelect();
 renderHistory();
 updateStats();
 renderSummaryLists();
-
-
-
-
-
-
-
-
-
