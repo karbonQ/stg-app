@@ -1,174 +1,183 @@
+// ربط العناصر بالـ DOM
+const nameInput = document.getElementById("nameInput");
+const traineeSelect = document.getElementById("traineeSelect");
+const history = document.getElementById("history");
+const attendanceDate = document.getElementById("attendanceDate");
+const presentCount = document.getElementById("presentCount");
+const absentCount = document.getElementById("absentCount");
+const attendanceRate = document.getElementById("attendanceRate");
+const presentList = document.getElementById("presentList");
+const absentList = document.getElementById("absentList");
+
 let trainees = JSON.parse(localStorage.getItem("trainees")) || [];
 let records = JSON.parse(localStorage.getItem("records")) || [];
 
-// حفظ البيانات
+/* حفظ البيانات */
 function save() {
     localStorage.setItem("trainees", JSON.stringify(trainees));
     localStorage.setItem("records", JSON.stringify(records));
 }
 
-// إضافة متربص
+/* إضافة متربص */
 function addTrainee() {
-    const name = document.getElementById("nameInput").value.trim();
-    if (name === "" || trainees.includes(name)) return;
+    const name = nameInput.value.trim();
+    if (!name || trainees.includes(name)) return;
+
     trainees.push(name);
-    document.getElementById("nameInput").value = "";
+    nameInput.value = "";
     save();
     renderSelect();
 }
 
-// عرض القائمة المنسدلة
+/* عرض القائمة المنسدلة */
 function renderSelect() {
-    const select = document.getElementById("traineeSelect");
-    select.innerHTML = "";
-
-    if (trainees.length === 0) {
-        const opt = document.createElement("option");
-        opt.textContent = "لا يوجد متربصين";
-        opt.disabled = true;
-        select.appendChild(opt);
-        return;
-    }
+    traineeSelect.innerHTML = "";
 
     trainees.forEach(name => {
-        const option = document.createElement("option");
-        option.textContent = name;
-        select.appendChild(option);
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        traineeSelect.appendChild(opt);
     });
 }
 
-// تسجيل الحضور/الغياب
+/* تسجيل الحضور أو الغياب */
 function markAttendance(status) {
-    const select = document.getElementById("traineeSelect");
-    const name = select.value;
-    if (!name) {
-        alert("اختر المتربص أولًا");
-        return;
-    }
+    const name = traineeSelect.value;
+    const date = attendanceDate.value;
 
-    // قراءة التاريخ مباشرة من حقل التاريخ
-    const dateInput = document.getElementById("attendanceDate").value;
-    if (!dateInput) {
-        alert("اختر تاريخ تسجيل الغياب/الحضور أولًا");
-        return;
-    }
+    if (!name) return alert("اختر المتربص");
+    if (!date) return alert("اختر التاريخ");
 
-    // استخدام التاريخ كما هو (YYYY-MM-DD) أو تحويله لعرض DD/MM/YYYY
-    const parts = dateInput.split("-");
-    const selectedDate = `${parts[2]}/${parts[1]}/${parts[0]}`; // يوم/شهر/سنة
-
-    // منع التسجيل المكرر لنفس الشخص في نفس التاريخ
-    const alreadyMarked = records.some(r => r.name === name && r.date === selectedDate);
-    if (alreadyMarked) {
-        alert(`تم تسجيل هذا المتربص بالفعل بتاريخ ${selectedDate}`);
-        return;
-    }
-
-    // تسجيل الحضور/الغياب مع التاريخ المختار
-    records.push({ name, status, date: selectedDate });
+    records.push({ name, status, date });
     save();
     renderHistory();
     updateStats();
+    renderSummaryLists();
 }
 
-
-
-// عرض السجل
+/* عرض آخر السجلات */
 function renderHistory() {
-    const list = document.getElementById("history");
-    list.innerHTML = "";
-    records.slice(-10).reverse().forEach(r => {
+    history.innerHTML = "";
+
+    records.slice().reverse().forEach((r, index) => {
         const li = document.createElement("li");
         li.className = r.status === "حاضر" ? "present" : "absent";
-        li.textContent = `${r.name} - ${r.status} (${r.date})`;
-        list.appendChild(li);
+
+        li.innerHTML = `
+            <span>${r.name} - ${r.status} (${r.date})</span>
+            <button onclick="toggleStatus(${records.length - 1 - index})">تعديل</button>
+        `;
+
+        history.appendChild(li);
     });
 }
 
-// الإحصائيات
+/* تبديل الحالة */
+function toggleStatus(i) {
+    records[i].status = records[i].status === "حاضر" ? "غائب" : "حاضر";
+    save();
+    renderHistory();
+    updateStats();
+    renderSummaryLists();
+}
+
+/* الإحصائيات */
 function updateStats() {
     const present = records.filter(r => r.status === "حاضر").length;
     const absent = records.filter(r => r.status === "غائب").length;
     const total = present + absent;
-    document.getElementById("presentCount").textContent = present;
-    document.getElementById("absentCount").textContent = absent;
-    document.getElementById("attendanceRate").textContent = total === 0 ? "0%" : Math.round((present / total) * 100) + "%";
+
+    presentCount.textContent = present;
+    absentCount.textContent = absent;
+    attendanceRate.textContent = total ? Math.round((present / total) * 100) + "%" : "0%";
 }
 
-// تعديل الاسم
-function editTrainee() {
-    const select = document.getElementById("traineeSelect");
-    const oldName = select.value;
-    const newName = document.getElementById("editNameInput").value.trim();
-
-    if (!oldName) { alert("اختر متربصًا أولًا"); return; }
-    if (newName === "") { alert("أدخل الاسم الجديد"); return; }
-    if (trainees.includes(newName)) { alert("هذا الاسم موجود مسبقًا"); return; }
-
-    trainees = trainees.map(t => t === oldName ? newName : t);
-    records = records.map(r => r.name === oldName ? {...r, name: newName} : r);
-
-    document.getElementById("editNameInput").value = "";
-    save();
-    renderSelect();
-    renderHistory();
-    updateStats();
-}
-
-// حذف المتربص
+/* حذف متربص */
 function deleteTrainee() {
-    const select = document.getElementById("traineeSelect");
-    const name = select.value;
-    if (!name) { alert("اختر متربصًا للحذف"); return; }
-    if (!confirm(`هل تريد حذف ${name} نهائيًا؟`)) return;
+    const name = traineeSelect.value;
+    if (!name) return;
 
     trainees = trainees.filter(t => t !== name);
     records = records.filter(r => r.name !== name);
+
     save();
     renderSelect();
     renderHistory();
     updateStats();
+    renderSummaryLists();
 }
 
-// تصدير CSV بالعربية بشكل صحيح
+/* تعديل اسم متربص */
+function editTrainee() {
+    const oldName = traineeSelect.value;
+    if (!oldName) return;
+
+    const newName = prompt("الاسم الجديد:", oldName);
+    if (!newName) return;
+
+    trainees = trainees.map(t => t === oldName ? newName : t);
+    records.forEach(r => { if (r.name === oldName) r.name = newName; });
+
+    save();
+    renderSelect();
+    renderHistory();
+    renderSummaryLists();
+}
+
+/* قوائم الحضور والغياب حسب التاريخ المختار */
+function renderSummaryLists() {
+    presentList.innerHTML = "";
+    absentList.innerHTML = "";
+
+    const selectedDate = attendanceDate.value;
+    if (!selectedDate) return;
+
+    const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+
+    const todayRecords = records.filter(r => {
+        const recordDate = new Date(r.date).toISOString().split('T')[0];
+        return recordDate === formattedDate;
+    });
+
+    todayRecords.forEach(r => {
+        const li = document.createElement("li");
+        li.textContent = r.name;
+
+        if (r.status === "حاضر") {
+            li.className = "present";
+            presentList.appendChild(li);
+        } else {
+            li.className = "absent";
+            absentList.appendChild(li);
+        }
+    });
+}
+
+/* تحديث القوائم عند تغيير التاريخ */
+attendanceDate.addEventListener("change", renderSummaryLists);
+
+/* تصدير CSV */
 function exportToCSV() {
-    if (records.length === 0) { alert("لا يوجد سجل حضور للتصدير"); return; }
+    if (records.length === 0) return alert("لا يوجد بيانات");
 
-    let csvContent = "الاسم,الحالة,التاريخ\n";
-    records.forEach(r => { csvContent += `"${r.name}","${r.status}","${r.date}"\n`; });
+    let csv = "\uFEFFالاسم,الحالة,التاريخ\n";
 
-    // إضافة BOM لتفادي مشكلة الترميز في Excel
-    const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
+    records.forEach(r => {
+        csv += `${r.name},${r.status},${r.date}\n`;
+    });
 
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
-    link.href = url;
+    link.href = URL.createObjectURL(blob);
     link.download = "سجل_الحضور.csv";
-    document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
 }
 
-// استدعاء كل شيء بعد تحميل الصفحة
-document.addEventListener("DOMContentLoaded", () => {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById("attendanceDate").value = today;
-
-    renderSelect();
-    renderHistory();
-    updateStats();
-});
-document.addEventListener("DOMContentLoaded", () => {
-    // تعيين اليوم الحالي كقيمة افتراضية لحقل التاريخ
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById("attendanceDate").value = today;
-
-    renderSelect();
-    renderHistory();
-    updateStats();
-});
+/* مسح سجل اليوم */
 function clearTodayRecords() {
     const selectedDate = attendanceDate.value;
+
     if (!selectedDate) {
         alert("اختر التاريخ أولاً");
         return;
@@ -176,10 +185,8 @@ function clearTodayRecords() {
 
     if (!confirm("هل أنت متأكد من مسح سجلات هذا اليوم فقط؟")) return;
 
-    // تحويل التاريخ المختار إلى YYYY-MM-DD
     const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
 
-    // حذف سجلات التاريخ المختار فقط
     records = records.filter(r => {
         const recordDate = new Date(r.date).toISOString().split('T')[0];
         return recordDate !== formattedDate;
@@ -192,7 +199,11 @@ function clearTodayRecords() {
     alert("تم مسح سجلات اليوم بنجاح ✅");
 }
 
-
+/* تشغيل عند فتح الصفحة */
+renderSelect();
+renderHistory();
+updateStats();
+renderSummaryLists();
 
 
 
