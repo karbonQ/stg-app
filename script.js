@@ -188,9 +188,15 @@ function clearTodayRecords() {
     if (!selectedDate) { alert("اختر التاريخ أولاً"); return; }
     if (!confirm("هل أنت متأكد من مسح سجلات هذا اليوم فقط؟")) return;
 
-    const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+    const selected = new Date(selectedDate);
 
-    records = records.filter(r => r.date !== formattedDate);
+    // فلترة السجلات بمطابقة اليوم والشهر والسنة فقط
+    records = records.filter(r => {
+        const recordDate = new Date(r.date);
+        return !(recordDate.getFullYear() === selected.getFullYear() &&
+                 recordDate.getMonth() === selected.getMonth() &&
+                 recordDate.getDate() === selected.getDate());
+    });
 
     save();
     renderHistory();
@@ -199,9 +205,11 @@ function clearTodayRecords() {
     alert("تم مسح سجلات اليوم بنجاح ✅");
 }
 
+
 /* تشغيل عند فتح الصفحة */
 renderSelect();
 renderHistory();
 updateStats();
 renderSummaryLists();
+
 
