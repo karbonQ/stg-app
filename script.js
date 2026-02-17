@@ -43,7 +43,7 @@ function renderSelect() {
 
 /* تحويل التاريخ من YYYY-MM-DD إلى DD-MM-YYYY للعرض فقط */
 function formatDateDisplay(dateStr) {
-    const [year, month, day] = dateStr.split('-');
+    const [year, month, day] = dateStr.split("-");
     return `${day}-${month}-${year}`;
 }
 
@@ -134,6 +134,36 @@ function editTrainee() {
     renderSummaryLists();
 }
 
+/* تحويل أي صيغة تاريخ إلى كائن يوم/شهر/سنة */
+function parseDateParts(dateStr) {
+    let day, month, year;
+
+    if (dateStr.includes("-")) {
+        const parts = dateStr.split("-");
+        if (parts[0].length === 4) { // YYYY-MM-DD
+            [year, month, day] = parts;
+        } else { // DD-MM-YYYY
+            [day, month, year] = parts;
+        }
+    } else if (dateStr.includes("/")) {
+        const parts = dateStr.split("/");
+        [day, month, year] = parts;
+    } else {
+        // fallback: حاول parse مع new Date
+        const d = new Date(dateStr);
+        if (!isNaN(d)) {
+            day = d.getDate();
+            month = d.getMonth() + 1;
+            year = d.getFullYear();
+        } else {
+            // تاريخ غير معروف، تجاهل السجل
+            return null;
+        }
+    }
+
+    return { day: parseInt(day), month: parseInt(month), year: parseInt(year) };
+}
+
 /* قوائم الحضور والغياب حسب التاريخ المختار */
 function renderSummaryLists() {
     presentList.innerHTML = "";
@@ -142,13 +172,15 @@ function renderSummaryLists() {
     const selectedDate = attendanceDate.value;
     if (!selectedDate) return;
 
-    const selected = new Date(selectedDate);
+    const selected = parseDateParts(selectedDate);
+    if (!selected) return;
 
     const todayRecords = records.filter(r => {
-        const recordDate = new Date(r.date);
-        return recordDate.getFullYear() === selected.getFullYear() &&
-               recordDate.getMonth() === selected.getMonth() &&
-               recordDate.getDate() === selected.getDate();
+        const record = parseDateParts(r.date);
+        return record && 
+               record.day === selected.day && 
+               record.month === selected.month && 
+               record.year === selected.year;
     });
 
     todayRecords.forEach(r => {
@@ -185,19 +217,21 @@ function exportToCSV() {
     link.click();
 }
 
-/* مسح سجل اليوم — الحل النهائي لمطابقة أي صيغة تاريخ */
+/* مسح سجل اليوم — يعمل مع أي صيغة تاريخ */
 function clearTodayRecords() {
     const selectedDate = attendanceDate.value;
     if (!selectedDate) { alert("اختر التاريخ أولاً"); return; }
     if (!confirm("هل أنت متأكد من مسح سجلات هذا اليوم فقط؟")) return;
 
-    const selected = new Date(selectedDate);
+    const selected = parseDateParts(selectedDate);
+    if (!selected) return;
 
     records = records.filter(r => {
-        const recordDate = new Date(r.date);
-        return !(recordDate.getFullYear() === selected.getFullYear() &&
-                 recordDate.getMonth() === selected.getMonth() &&
-                 recordDate.getDate() === selected.getDate());
+        const record = parseDateParts(r.date);
+        return !(record && 
+                 record.day === selected.day && 
+                 record.month === selected.month && 
+                 record.year === selected.year);
     });
 
     save();
