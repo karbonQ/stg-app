@@ -167,6 +167,25 @@ document.addEventListener("DOMContentLoaded", () => {
     renderHistory();
     updateStats();
 });
+function clearTodayRecords() {
+    const selectedDate = attendanceDate.value;
+
+    if (!selectedDate) {
+        alert("اختر التاريخ أولاً");
+        return;
+    }
+
+    if (!confirm("هل أنت متأكد من مسح سجلات هذا اليوم فقط؟")) return;
+
+    // حذف سجلات التاريخ المختار فقط
+    records = records.filter(r => r.date !== selectedDate);
+
+    save();
+    renderHistory();
+    updateStats();
+    renderSummaryLists();
+}
+
 
 
 
