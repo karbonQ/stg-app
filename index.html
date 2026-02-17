@@ -1,13 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الحضور</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-
-<title>تسجيل الحضور</title>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
         <p class="subtitle">تخصص: تلقين الإعلام الآلي</p>
     </div>
 
-    <label>اختر تاريخ التسجيل:</label>
+    <label>📅 تاريخ التسجيل</label>
     <input type="date" id="attendanceDate">
 
     <div class="stats">
@@ -29,7 +29,7 @@
     </div>
 
     <input type="text" id="nameInput" placeholder="اسم المتربص">
-    <button onclick="addTrainee()">➕ إضافة</button>
+    <button onclick="addTrainee()">➕ إضافة متربص</button>
 
     <select id="traineeSelect"></select>
 
@@ -37,15 +37,22 @@
     <button class="absent" onclick="markAttendance('غائب')">✖ غائب</button>
 
     <button onclick="editTrainee()">✏️ تعديل الاسم</button>
-    <button onclick="deleteTrainee()">🗑 حذف المتربص</button>
+    <button onclick="deleteTrainee()">🗑 حذف الاسم</button>
 
-    <button onclick="exportToCSV()">📤 تصدير إلى CSV</button>
-        <ul id="history"></ul>
-<button onclick="clearTodayRecords()">🧹 مسح حضور وغياب هذا اليوم</button>
+    <button onclick="exportToCSV()">📤 تصدير CSV</button>
+    <button onclick="clearTodayRecords()">🧹 مسح حضور وغياب هذا اليوم</button>
+
+    <h3>📝 سجل آخر العمليات</h3>
+    <ul id="history"></ul>
+
+    <h3>📗 المسجلون حضورًا</h3>
+    <ul id="presentList"></ul>
+
+    <h3>📕 المسجلون غيابًا</h3>
+    <ul id="absentList"></ul>
 
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
-
