@@ -169,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 function clearTodayRecords() {
     const selectedDate = attendanceDate.value;
-
     if (!selectedDate) {
         alert("اختر التاريخ أولاً");
         return;
@@ -177,14 +176,23 @@ function clearTodayRecords() {
 
     if (!confirm("هل أنت متأكد من مسح سجلات هذا اليوم فقط؟")) return;
 
+    // تحويل التاريخ المختار إلى YYYY-MM-DD
+    const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+
     // حذف سجلات التاريخ المختار فقط
-    records = records.filter(r => r.date !== selectedDate);
+    records = records.filter(r => {
+        const recordDate = new Date(r.date).toISOString().split('T')[0];
+        return recordDate !== formattedDate;
+    });
 
     save();
     renderHistory();
     updateStats();
     renderSummaryLists();
+    alert("تم مسح سجلات اليوم بنجاح ✅");
 }
+
+
 
 
 
