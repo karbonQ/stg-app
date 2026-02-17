@@ -1,3 +1,9 @@
+// تحويل التاريخ من YYYY-MM-DD إلى DD-MM-YYYY للعرض فقط
+function formatDateDisplay(dateStr) {
+    const [year, month, day] = dateStr.split('-');
+    return `${day}-${month}-${year}`;
+}
+
 // ربط العناصر بالـ DOM
 const nameInput = document.getElementById("nameInput");
 const traineeSelect = document.getElementById("traineeSelect");
@@ -68,9 +74,10 @@ function renderHistory() {
         li.className = r.status === "حاضر" ? "present" : "absent";
 
         li.innerHTML = `
-            <span>${r.name} - ${r.status} (${r.date})</span>
-            <button onclick="toggleStatus(${records.length - 1 - index})">تعديل</button>
-        `;
+    <span>${r.name} - ${r.status} (${formatDateDisplay(r.date)})</span>
+    <button onclick="toggleStatus(${records.length - 1 - index})">تعديل</button>
+`;
+
 
         history.appendChild(li);
     });
@@ -142,7 +149,8 @@ function renderSummaryLists() {
 
     todayRecords.forEach(r => {
         const li = document.createElement("li");
-        li.textContent = r.name;
+       li.textContent = `${r.name} (${formatDateDisplay(r.date)})`;
+
 
         if (r.status === "حاضر") {
             li.className = "present";
@@ -196,3 +204,4 @@ renderSelect();
 renderHistory();
 updateStats();
 renderSummaryLists();
+
