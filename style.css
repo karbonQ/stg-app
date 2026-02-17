@@ -24,12 +24,12 @@ body {
 /* العنوان */
 .header {
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 h1 {
     margin: 0;
-    font-size: 16px;
+    font-size: 5px;
 }
 h2 {
     margin: 0;
@@ -130,6 +130,7 @@ li {
 /* حدود الحالة */
 li.present { border-right: 4px solid #22c55e; }
 li.absent  { border-right: 4px solid #ef4444; }
+
 
 
 
