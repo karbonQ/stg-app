@@ -30,8 +30,8 @@ body {
 h1 {
     margin: 0;
     font-size: 5px;
-}
-h2 {
+
+h2 
     margin: 0;
     font-size: 30px;
 }
@@ -130,6 +130,7 @@ li {
 /* حدود الحالة */
 li.present { border-right: 4px solid #22c55e; }
 li.absent  { border-right: 4px solid #ef4444; }
+
 
 
 
