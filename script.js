@@ -1,9 +1,3 @@
-// تحويل التاريخ من YYYY-MM-DD إلى DD-MM-YYYY للعرض فقط
-function formatDateDisplay(dateStr) {
-    const [year, month, day] = dateStr.split('-');
-    return `${day}-${month}-${year}`;
-}
-
 // ربط العناصر بالـ DOM
 const nameInput = document.getElementById("nameInput");
 const traineeSelect = document.getElementById("traineeSelect");
@@ -47,6 +41,12 @@ function renderSelect() {
     });
 }
 
+/* تحويل التاريخ من YYYY-MM-DD إلى DD-MM-YYYY للعرض فقط */
+function formatDateDisplay(dateStr) {
+    const [year, month, day] = dateStr.split('-');
+    return `${day}-${month}-${year}`;
+}
+
 /* تسجيل الحضور أو الغياب */
 function markAttendance(status) {
     const name = traineeSelect.value;
@@ -55,7 +55,7 @@ function markAttendance(status) {
     if (!name) return alert("اختر المتربص");
     if (!date) return alert("اختر التاريخ");
 
-    // حفظ التاريخ دائمًا بصيغة YYYY-MM-DD
+    // حفظ التاريخ بصيغة YYYY-MM-DD
     const formattedDate = new Date(date).toISOString().split('T')[0];
 
     records.push({ name, status, date: formattedDate });
@@ -74,10 +74,9 @@ function renderHistory() {
         li.className = r.status === "حاضر" ? "present" : "absent";
 
         li.innerHTML = `
-    <span>${r.name} - ${r.status} (${formatDateDisplay(r.date)})</span>
-    <button onclick="toggleStatus(${records.length - 1 - index})">تعديل</button>
-`;
-
+            <span>${r.name} - ${r.status} (${formatDateDisplay(r.date)})</span>
+            <button onclick="toggleStatus(${records.length - 1 - index})">تعديل</button>
+        `;
 
         history.appendChild(li);
     });
@@ -143,14 +142,18 @@ function renderSummaryLists() {
     const selectedDate = attendanceDate.value;
     if (!selectedDate) return;
 
-    const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+    const selected = new Date(selectedDate);
 
-    const todayRecords = records.filter(r => r.date === formattedDate);
+    const todayRecords = records.filter(r => {
+        const recordDate = new Date(r.date);
+        return recordDate.getFullYear() === selected.getFullYear() &&
+               recordDate.getMonth() === selected.getMonth() &&
+               recordDate.getDate() === selected.getDate();
+    });
 
     todayRecords.forEach(r => {
         const li = document.createElement("li");
-       li.textContent = `${r.name} (${formatDateDisplay(r.date)})`;
-
+        li.textContent = `${r.name} (${formatDateDisplay(r.date)})`;
 
         if (r.status === "حاضر") {
             li.className = "present";
@@ -182,7 +185,7 @@ function exportToCSV() {
     link.click();
 }
 
-/* مسح سجل اليوم */
+/* مسح سجل اليوم — الحل النهائي لمطابقة أي صيغة تاريخ */
 function clearTodayRecords() {
     const selectedDate = attendanceDate.value;
     if (!selectedDate) { alert("اختر التاريخ أولاً"); return; }
@@ -190,7 +193,6 @@ function clearTodayRecords() {
 
     const selected = new Date(selectedDate);
 
-    // فلترة السجلات بمطابقة اليوم والشهر والسنة فقط
     records = records.filter(r => {
         const recordDate = new Date(r.date);
         return !(recordDate.getFullYear() === selected.getFullYear() &&
@@ -205,11 +207,8 @@ function clearTodayRecords() {
     alert("تم مسح سجلات اليوم بنجاح ✅");
 }
 
-
 /* تشغيل عند فتح الصفحة */
 renderSelect();
 renderHistory();
 updateStats();
 renderSummaryLists();
-
-
