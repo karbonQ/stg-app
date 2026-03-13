@@ -2,39 +2,37 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>نظام تسجيل الحضور و الغيابات</title>
+<title>لوحة إدارة الحضور</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
 
 <div class="container">
 
-<h1>📋 نظام تسجيل الحضور</h1>
+<h1>📋 لوحة إدارة الحضور</h1>
 
-<h2> التخصصات</h2>
+<button id="themeToggle" onclick="toggleTheme()">🌙 الوضع الليلي</button>
+
+<hr>
+
+<h2>إدارة التخصصات</h2>
 
 <select id="specialtySelect" onchange="loadTrainees()"></select>
-
 <input type="text" id="newSpecialty" placeholder="تخصص جديد">
 <button onclick="addSpecialty()">إضافة تخصص</button>
 
 <hr>
 
-<h2> المتربصين</h2>
+<h2>إدارة المتربصين</h2>
 
 <input type="text" id="traineeName" placeholder="اسم المتربص">
 <button onclick="addTrainee()">إضافة متربص</button>
 
-<br><br>
-
 <select id="traineeSelect" size="6"></select>
-
-<br><br>
-
+<br>
 <button onclick="editTrainee()">تعديل الاسم</button>
 <button onclick="deleteTrainee()">حذف المتربص</button>
-
 <p id="countTrainees"></p>
 
 <hr>
@@ -42,31 +40,31 @@
 <h2>تسجيل الحضور</h2>
 
 <input type="date" id="attendanceDate">
-
-<br><br>
-
-<button onclick="markAttendance('حاضر')" class="present">حاضر</button>
-<button onclick="markAttendance('غائب')" class="absent">غائب</button>
+<button onclick="markAttendance('حاضر')" class="present">✅ حاضر</button>
+<button onclick="markAttendance('غائب')" class="absent">❌ غائب</button>
 
 <hr>
 
-<h2>السجل</h2>
-
+<h2>السجل الأخير</h2>
 <ul id="attendanceList"></ul>
+<button onclick="exportCSV()">📥 تصدير Excel</button>
 
-<button onclick="exportCSV()"> تسجيل الحضور/الغياب Excel</button>
+<hr>
+
+<h2>الإحصائيات</h2>
+<div id="statsCards" class="cards-container"></div>
+
+<h2>رسم بياني للحضور</h2>
+<canvas id="attendanceChart"></canvas>
+
+<hr>
+
+<h2>بحث</h2>
+<input type="text" id="searchInput" placeholder="ابحث عن متربص أو تخصص" onkeyup="searchRecords()">
+<ul id="searchResults"></ul>
 
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
