@@ -1,296 +1,191 @@
-// ربط العناصر بالـ DOM
-const nameInput = document.getElementById("nameInput");
-const traineeSelect = document.getElementById("traineeSelect");
-const history = document.getElementById("history");
-const attendanceDate = document.getElementById("attendanceDate");
-const presentCount = document.getElementById("presentCount");
-const absentCount = document.getElementById("absentCount");
-const attendanceRate = document.getElementById("attendanceRate");
-const presentList = document.getElementById("presentList");
-const absentList = document.getElementById("absentList");
-
-let trainees = JSON.parse(localStorage.getItem("trainees")) || [];
+let specialties = JSON.parse(localStorage.getItem("specialties")) || {};
 let records = JSON.parse(localStorage.getItem("records")) || [];
 
-/* حفظ البيانات */
-function save() {
-    localStorage.setItem("trainees", JSON.stringify(trainees));
-    localStorage.setItem("records", JSON.stringify(records));
+const specialtySelect = document.getElementById("specialtySelect");
+const traineeSelect = document.getElementById("traineeSelect");
+const attendanceList = document.getElementById("attendanceList");
+
+function saveData(){
+localStorage.setItem("specialties",JSON.stringify(specialties));
+localStorage.setItem("records",JSON.stringify(records));
 }
 
-/* إضافة متربص */
-function addTrainee() {
-    const name = nameInput.value.trim();
-    if (!name || trainees.includes(name)) return;
+function loadSpecialties(){
 
-    trainees.push(name);
-    nameInput.value = "";
-    save();
-    renderSelect();
+specialtySelect.innerHTML="";
+
+for(let spec in specialties){
+
+let option=document.createElement("option");
+option.value=spec;
+option.textContent=spec;
+
+specialtySelect.appendChild(option);
+
 }
-const traineesBySpecialty = {
 
-    info: [
-        "أحمد",
-        "يوسف",
-        "سليم",
-        "خالد"
-    ],
+loadTrainees();
 
-    prog: [
-        "كريم",
-        "علي",
-        "حسام"
-    ],
+}
 
-    net: [
-        "سامي",
-        "رامي"
-    ]
+function addSpecialty(){
+
+let name=document.getElementById("newSpecialty").value.trim();
+
+if(name==="")return;
+
+if(!specialties[name]){
+specialties[name]=[];
+}
+
+document.getElementById("newSpecialty").value="";
+
+saveData();
+loadSpecialties();
+
+}
+
+function addTrainee(){
+
+let name=document.getElementById("traineeName").value.trim();
+let spec=specialtySelect.value;
+
+if(name===""||!spec)return;
+
+specialties[spec].push(name);
+
+document.getElementById("traineeName").value="";
+
+saveData();
+loadTrainees();
+
+}
+
+function loadTrainees(){
+
+let spec=specialtySelect.value;
+
+traineeSelect.innerHTML="";
+
+if(!spec||!specialties[spec])return;
+
+specialties[spec].forEach(name=>{
+
+let option=document.createElement("option");
+option.textContent=name;
+
+traineeSelect.appendChild(option);
+
+});
+
+document.getElementById("countTrainees").textContent=
+"عدد المتربصين في هذا التخصص: "+specialties[spec].length;
+
+}
+
+function deleteTrainee(){
+
+let spec=specialtySelect.value;
+let name=traineeSelect.value;
+
+if(!name)return;
+
+specialties[spec]=specialties[spec].filter(t=>t!==name);
+
+saveData();
+loadTrainees();
+
+}
+
+function editTrainee(){
+
+let spec=specialtySelect.value;
+let oldName=traineeSelect.value;
+
+if(!oldName)return;
+
+let newName=prompt("الاسم الجديد:",oldName);
+
+if(!newName)return;
+
+specialties[spec]=specialties[spec].map(t=>t===oldName?newName:t);
+
+saveData();
+loadTrainees();
+
+}
+
+function markAttendance(status){
+
+let trainee=traineeSelect.value;
+let spec=specialtySelect.value;
+let date=document.getElementById("attendanceDate").value;
+
+if(!trainee||!date){
+alert("اختر المتربص والتاريخ");
+return;
+}
+
+records.push({
+name:trainee,
+specialty:spec,
+status:status,
+date:date
+});
+
+saveData();
+
+renderAttendance();
+
+}
+
+function renderAttendance(){
+
+attendanceList.innerHTML="";
+
+records.slice(-10).reverse().forEach(r=>{
+
+let li=document.createElement("li");
+
+li.textContent=
+r.date+" | "+
+r.specialty+" | "+
+r.name+" | "+
+r.status;
+
+attendanceList.appendChild(li);
+
+});
+
+}
+
+function exportCSV(){
+
+if(records.length===0)return;
+
+let csv="\uFEFFالتاريخ,التخصص,الاسم,الحالة\n";
+
+records.forEach(r=>{
+
+csv+=`${r.date},${r.specialty},${r.name},${r.status}\n`;
+
+});
+
+let blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+
+let link=document.createElement("a");
+
+link.href=URL.createObjectURL(blob);
+link.download="attendance.csv";
+
+link.click();
+
+}
+
+window.onload=function(){
+
+loadSpecialties();
+renderAttendance();
 
 };
-
-function loadTrainees() {
-
-    const specialty = document.getElementById("specialtySelect").value;
-    const select = document.getElementById("traineeSelect");
-
-    // مسح القائمة
-    select.innerHTML = "";
-
-    // جلب المتربصين حسب التخصص
-    const trainees = traineesBySpecialty[specialty];
-
-    trainees.forEach(function(name) {
-
-        const option = document.createElement("option");
-        option.textContent = name;
-        option.value = name;
-
-        select.appendChild(option);
-
-    });
-
-}
-
-// تشغيل عند فتح الصفحة
-window.onload = loadTrainees;
-/* عرض القائمة المنسدلة */
-function renderSelect() {
-    traineeSelect.innerHTML = "";
-
-    trainees.forEach(name => {
-        const opt = document.createElement("option");
-        opt.value = name;
-        opt.textContent = name;
-        traineeSelect.appendChild(opt);
-    });
-}
-
-/* تحويل التاريخ من YYYY-MM-DD إلى DD-MM-YYYY للعرض فقط */
-function formatDateDisplay(dateStr) {
-    const [year, month, day] = dateStr.split("-");
-    return `${day}-${month}-${year}`;
-}
-
-/* تسجيل الحضور أو الغياب */
-function markAttendance(status) {
-    const name = traineeSelect.value;
-    const date = attendanceDate.value;
-
-    if (!name) return alert("اختر المتربص");
-    if (!date) return alert("اختر التاريخ");
-
-    // حفظ التاريخ بصيغة YYYY-MM-DD
-    const formattedDate = new Date(date).toISOString().split('T')[0];
-
-    records.push({ name, status, date: formattedDate });
-    save();
-    renderHistory();
-    updateStats();
-    renderSummaryLists();
-}
-
-/* عرض آخر السجلات */
-function renderHistory() {
-    history.innerHTML = "";
-
-    records.slice().reverse().forEach((r, index) => {
-        const li = document.createElement("li");
-        li.className = r.status === "حاضر" ? "present" : "absent";
-
-        li.innerHTML = `
-            <span>${r.name} - ${r.status} (${formatDateDisplay(r.date)})</span>
-            <button onclick="toggleStatus(${records.length - 1 - index})">تعديل</button>
-        `;
-
-        history.appendChild(li);
-    });
-}
-
-/* تبديل الحالة */
-function toggleStatus(i) {
-    records[i].status = records[i].status === "حاضر" ? "غائب" : "حاضر";
-    save();
-    renderHistory();
-    updateStats();
-    renderSummaryLists();
-}
-
-/* الإحصائيات */
-function updateStats() {
-    const present = records.filter(r => r.status === "حاضر").length;
-    const absent = records.filter(r => r.status === "غائب").length;
-    const total = present + absent;
-
-    presentCount.textContent = present;
-    absentCount.textContent = absent;
-    attendanceRate.textContent = total ? Math.round((present / total) * 100) + "%" : "0%";
-}
-
-/* حذف متربص */
-function deleteTrainee() {
-    const name = traineeSelect.value;
-    if (!name) return;
-
-    trainees = trainees.filter(t => t !== name);
-    records = records.filter(r => r.name !== name);
-
-    save();
-    renderSelect();
-    renderHistory();
-    updateStats();
-    renderSummaryLists();
-}
-
-/* تعديل اسم متربص */
-function editTrainee() {
-    const oldName = traineeSelect.value;
-    if (!oldName) return;
-
-    const newName = prompt("الاسم الجديد:", oldName);
-    if (!newName) return;
-
-    trainees = trainees.map(t => t === oldName ? newName : t);
-    records.forEach(r => { if (r.name === oldName) r.name = newName; });
-
-    save();
-    renderSelect();
-    renderHistory();
-    renderSummaryLists();
-}
-
-/* تحويل أي صيغة تاريخ إلى كائن يوم/شهر/سنة */
-function parseDateParts(dateStr) {
-    let day, month, year;
-
-    if (dateStr.includes("-")) {
-        const parts = dateStr.split("-");
-        if (parts[0].length === 4) { // YYYY-MM-DD
-            [year, month, day] = parts;
-        } else { // DD-MM-YYYY
-            [day, month, year] = parts;
-        }
-    } else if (dateStr.includes("/")) {
-        const parts = dateStr.split("/");
-        [day, month, year] = parts;
-    } else {
-        // fallback: حاول parse مع new Date
-        const d = new Date(dateStr);
-        if (!isNaN(d)) {
-            day = d.getDate();
-            month = d.getMonth() + 1;
-            year = d.getFullYear();
-        } else {
-            // تاريخ غير معروف، تجاهل السجل
-            return null;
-        }
-    }
-
-    return { day: parseInt(day), month: parseInt(month), year: parseInt(year) };
-}
-
-/* قوائم الحضور والغياب حسب التاريخ المختار */
-function renderSummaryLists() {
-    presentList.innerHTML = "";
-    absentList.innerHTML = "";
-
-    const selectedDate = attendanceDate.value;
-    if (!selectedDate) return;
-
-    const selected = parseDateParts(selectedDate);
-    if (!selected) return;
-
-    const todayRecords = records.filter(r => {
-        const record = parseDateParts(r.date);
-        return record && 
-               record.day === selected.day && 
-               record.month === selected.month && 
-               record.year === selected.year;
-    });
-
-    todayRecords.forEach(r => {
-        const li = document.createElement("li");
-        li.textContent = `${r.name} (${formatDateDisplay(r.date)})`;
-
-        if (r.status === "حاضر") {
-            li.className = "present";
-            presentList.appendChild(li);
-        } else {
-            li.className = "absent";
-            absentList.appendChild(li);
-        }
-    });
-}
-
-/* تحديث القوائم عند تغيير التاريخ */
-attendanceDate.addEventListener("change", renderSummaryLists);
-
-/* تصدير CSV */
-function exportToCSV() {
-    if (records.length === 0) return alert("لا يوجد بيانات");
-
-    let csv = "\uFEFFالاسم,الحالة,التاريخ\n";
-
-    records.forEach(r => {
-        csv += `${r.name},${r.status},${r.date}\n`;
-    });
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "سجل_الحضور.csv";
-    link.click();
-}
-
-/* مسح سجل اليوم — يعمل مع أي صيغة تاريخ */
-function clearTodayRecords() {
-    const selectedDate = attendanceDate.value;
-    if (!selectedDate) { alert("اختر التاريخ أولاً"); return; }
-    if (!confirm("هل أنت متأكد من مسح سجلات هذا اليوم فقط؟")) return;
-
-    const selected = parseDateParts(selectedDate);
-    if (!selected) return;
-
-    records = records.filter(r => {
-        const record = parseDateParts(r.date);
-        return !(record && 
-                 record.day === selected.day && 
-                 record.month === selected.month && 
-                 record.year === selected.year);
-    });
-
-    save();
-    renderHistory();
-    updateStats();
-    renderSummaryLists();
-    alert("تم مسح سجلات اليوم بنجاح ✅");
-}
-
-/* تشغيل عند فتح الصفحة */
-renderSelect();
-renderHistory();
-updateStats();
-renderSummaryLists();
-loadTrainees();
 
