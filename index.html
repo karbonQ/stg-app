@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>نظام تسجيل الحضور</title>
+<title>نظام تسجيل الحضور و الغيابات</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,7 +12,7 @@
 
 <h1>📋 نظام تسجيل الحضور</h1>
 
-<h2>إدارة التخصصات</h2>
+<h2> التخصصات</h2>
 
 <select id="specialtySelect" onchange="loadTrainees()"></select>
 
@@ -21,7 +21,7 @@
 
 <hr>
 
-<h2>إدارة المتربصين</h2>
+<h2> المتربصين</h2>
 
 <input type="text" id="traineeName" placeholder="اسم المتربص">
 <button onclick="addTrainee()">إضافة متربص</button>
@@ -54,7 +54,7 @@
 
 <ul id="attendanceList"></ul>
 
-<button onclick="exportCSV()">📥 تصدير Excel</button>
+<button onclick="exportCSV()"> تسجيل الحضور/الغياب Excel</button>
 
 </div>
 
