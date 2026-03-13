@@ -30,7 +30,16 @@
         <div class="stat"><span id="absentCount">0</span><small>غياب</small></div>
         <div class="stat"><span id="attendanceRate">0%</span><small>النسبة</small></div>
     </div>
+<label>اختر التخصص:</label>
+<select id="specialtySelect" onchange="filterTrainees()">
+    <option value="">-- اختر التخصص --</option>
+    <option value="تلقين الإعلام الآلي">تلقين الإعلام الآلي</option>
+    <option value="برمجة">برمجة</option>
+    <option value="شبكات">شبكات</option>
+</select>
 
+<label>اختر المتربص:</label>
+<select id="traineeSelect"></select>
     <input type="text" id="nameInput" placeholder="اسم المتربص">
     <button onclick="addTrainee()">➕ إضافة متربص</button>
 
@@ -59,6 +68,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
