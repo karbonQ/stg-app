@@ -28,7 +28,27 @@ function addTrainee() {
     save();
     renderSelect();
 }
+const traineesBySpecialty = {
 
+    informatique: [
+        "أحمد",
+        "يوسف",
+        "سليم",
+        "خالد"
+    ],
+
+    programming: [
+        "كريم",
+        "علي",
+        "حسام"
+    ],
+
+    network: [
+        "سامي",
+        "رامي"
+    ]
+
+};
 /* عرض القائمة المنسدلة */
 function renderSelect() {
     traineeSelect.innerHTML = "";
@@ -246,3 +266,4 @@ renderSelect();
 renderHistory();
 updateStats();
 renderSummaryLists();
+loadTrainees();
