@@ -30,25 +30,51 @@ function addTrainee() {
 }
 const traineesBySpecialty = {
 
-    informatique: [
+    info: [
         "أحمد",
         "يوسف",
         "سليم",
         "خالد"
     ],
 
-    programming: [
+    prog: [
         "كريم",
         "علي",
         "حسام"
     ],
 
-    network: [
+    net: [
         "سامي",
         "رامي"
     ]
 
 };
+
+function loadTrainees() {
+
+    const specialty = document.getElementById("specialtySelect").value;
+    const select = document.getElementById("traineeSelect");
+
+    // مسح القائمة
+    select.innerHTML = "";
+
+    // جلب المتربصين حسب التخصص
+    const trainees = traineesBySpecialty[specialty];
+
+    trainees.forEach(function(name) {
+
+        const option = document.createElement("option");
+        option.textContent = name;
+        option.value = name;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+// تشغيل عند فتح الصفحة
+window.onload = loadTrainees;
 /* عرض القائمة المنسدلة */
 function renderSelect() {
     traineeSelect.innerHTML = "";
@@ -267,3 +293,4 @@ renderHistory();
 updateStats();
 renderSummaryLists();
 loadTrainees();
+
