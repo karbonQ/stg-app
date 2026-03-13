@@ -1,78 +1,67 @@
-
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الحضور و الغيابات اليومية</title> 
-<title>تسجيل الحضور و الغيابات اليومية للمتربصين</title> 
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<title>نظام تسجيل الحضور</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="app">
+<div class="container">
 
-    <div class="header">
-        <h2> وزارة التكوين و التعليم المهنيين </h2>
-        <h2> مركز التكوين المهني و التمهين الشهيد أحمد زبانة السوقر1 </h2>
-        <h2> تسجيل الحضور </h2>
-        <p class="subtitle"> تخصص:الأمــــانة </p>
-    </div>
+<h1>📋 نظام تسجيل الحضور</h1>
 
-    <label>📅 تاريخ التسجيل</label>
-    <input type="date" id="attendanceDate">
+<h2>إدارة التخصصات</h2>
 
-    <div class="stats">
-        <div class="stat"><span id="presentCount">0</span><small>حضور</small></div>
-        <div class="stat"><span id="absentCount">0</span><small>غياب</small></div>
-        <div class="stat"><span id="attendanceRate">0%</span><small>النسبة</small></div>
-    </div>
-<label>اختر التخصص:</label>
-<select id="specialtySelect" onchange="loadTrainees()">
-    <option value="informatique">تلقين الإعلام الآلي</option>
-    <option value="programming">برمجة</option>
-    <option value="network">شبكات</option>
-</select>
+<select id="specialtySelect" onchange="loadTrainees()"></select>
+
+<input type="text" id="newSpecialty" placeholder="تخصص جديد">
+<button onclick="addSpecialty()">إضافة تخصص</button>
+
+<hr>
+
+<h2>إدارة المتربصين</h2>
+
+<input type="text" id="traineeName" placeholder="اسم المتربص">
+<button onclick="addTrainee()">إضافة متربص</button>
+
 <br><br>
-<label>اختر المتربص:</label>
-<select id="traineeSelect"></select>
 
-    <input type="text" id="nameInput" placeholder="اسم المتربص">
-    <button onclick="addTrainee()">➕ إضافة متربص</button>
+<select id="traineeSelect" size="6"></select>
 
-    <select id="traineeSelect"></select>
+<br><br>
 
-    <button class="present" onclick="markAttendance('حاضر')">✔ حاضر</button>
-    <button class="absent" onclick="markAttendance('غائب')">✖ غائب</button>
+<button onclick="editTrainee()">تعديل الاسم</button>
+<button onclick="deleteTrainee()">حذف المتربص</button>
 
-    <button onclick="editTrainee()">✏️ تعديل الاسم</button>
-    <button onclick="deleteTrainee()">🗑 حذف الاسم</button>
+<p id="countTrainees"></p>
 
-    <button onclick="exportToCSV()">📤 تصدير CSV</button>
-    <button onclick="clearTodayRecords()">🧹 مسح حضور وغياب هذا اليوم</button>
+<hr>
 
-    <h3>📝 سجل آخر العمليات</h3>
-    <ul id="history"></ul>
+<h2>تسجيل الحضور</h2>
 
-    <h3>📗 المسجلون حضورًا</h3>
-    <ul id="presentList"></ul>
+<input type="date" id="attendanceDate">
 
-    <h3>📕 المسجلون غيابًا</h3>
-    <ul id="absentList"></ul>
+<br><br>
+
+<button onclick="markAttendance('حاضر')" class="present">حاضر</button>
+<button onclick="markAttendance('غائب')" class="absent">غائب</button>
+
+<hr>
+
+<h2>السجل</h2>
+
+<ul id="attendanceList"></ul>
+
+<button onclick="exportCSV()">📥 تصدير Excel</button>
 
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
-
-
-
-
-
 
 
 
