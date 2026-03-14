@@ -529,4 +529,6 @@ specialtySelect.addEventListener("change",()=>{
     renderChart();
 
 });
-
+function login(){
+alert("تم استدعاء دالة login");
+}
