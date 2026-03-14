@@ -128,11 +128,25 @@ function editTrainee(){
     let spec = specialtySelect.value;
     let oldName = traineeSelect.value;
     if(!oldName) return;
+
     let newName = prompt("الاسم الجديد:", oldName);
     if(!newName) return;
-    specialties[spec] = specialties[spec].map(t=>t===oldName?newName:t);
-    saveData();
-    loadTrainees();
+
+    if(confirm(`هل أنت متأكد أنك تريد تعديل المتربص "${oldName}" إلى "${newName}"؟`)){
+        specialties[spec] = specialties[spec].map(t=>t===oldName?newName:t);
+
+        // تحديث السجلات القديمة
+        records.forEach(r=>{
+            if(r.name === oldName && r.specialty === spec){
+                r.name = newName;
+            }
+        });
+
+        saveData();
+        loadTrainees();
+        renderAttendance();
+        alert("تم تعديل المتربص بنجاح ✅");
+    }
 }
 
 // حذف متربص
@@ -140,9 +154,20 @@ function deleteTrainee(){
     let spec = specialtySelect.value;
     let name = traineeSelect.value;
     if(!name) return;
-    specialties[spec] = specialties[spec].filter(t=>t!==name);
-    saveData();
-    loadTrainees();
+
+    if(confirm(`هل أنت متأكد أنك تريد حذف المتربص "${name}"؟`)){
+        specialties[spec] = specialties[spec].filter(t=>t!==name);
+
+        // حذف سجلاته
+        records = records.filter(r=>!(r.name===name && r.specialty===spec));
+
+        saveData();
+        loadTrainees();
+        renderAttendance();
+        renderStats();
+        renderChart();
+        alert("تم حذف المتربص بنجاح 🗑️");
+    }
 }
 
 // تسجيل الحضور/الغياب
