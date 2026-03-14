@@ -1,216 +1,174 @@
-/* قاعدة عامة */
 *{
-  box-sizing:border-box;
-  font-family: 'Segoe UI', cairo, sans-serif;
+box-sizing:border-box;
+font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 body{
-  background: linear-gradient(135deg,#eef2f7,#dfe9f3);
-  margin:0;
-  padding:0;
-  direction: rtl;
-  transition: 0.3s;
+margin:0;
+padding:0;
+background:linear-gradient(135deg,#4facfe,#00f2fe);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+direction:rtl;
 }
 
 .container{
-  max-width: 700px;
-  margin: 30px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  transition: 0.3s;
+width:95%;
+max-width:850px;
+background:white;
+margin-top:30px;
+padding:25px;
+border-radius:15px;
+box-shadow:0 15px 35px rgba(0,0,0,0.15);
 }
 
-/* العناوين */
+/* العنوان */
+
 h1{
-  text-align:center;
-  margin-bottom:20px;
-  color:#2c3e50;
+text-align:center;
+color:#2c3e50;
+margin-bottom:5px;
 }
 
-h2{
-  color:#34495e;
-  margin-top:20px;
-  margin-bottom:10px;
-  font-size:18px;
+.subtitle{
+text-align:center;
+color:#777;
+margin-bottom:20px;
 }
 
-/* الحقول والقوائم */
-input, select{
-  width: 100%;
-  padding: 10px 12px;
-  margin: 6px 0 12px 0;
-  border-radius: 8px;
-  border: 1px solid #dcdcdc;
-  font-size: 14px;
-  transition: 0.2s;
+/* الإحصائيات */
+
+.stats{
+display:flex;
+gap:10px;
+margin-bottom:20px;
 }
 
-input:focus, select:focus{
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52,152,219,0.15);
+.stat{
+flex:1;
+background:#f4f6f8;
+padding:15px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+.stat span{
+font-size:22px;
+font-weight:bold;
+display:block;
+}
+
+.presentStat span{
+color:#27ae60;
+}
+
+.absentStat span{
+color:#e74c3c;
+}
+
+.totalStat span{
+color:#3498db;
+}
+
+/* الحقول */
+
+input,select{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+margin-top:5px;
+margin-bottom:10px;
+font-size:14px;
 }
 
 /* الأزرار */
+
 button{
-  background: #3498db;
-  border:none;
-  color:white;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  margin: 3px;
-  transition: 0.2s;
+border:none;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+font-size:14px;
+margin:3px;
+transition:0.2s;
 }
 
 button:hover{
-  transform: translateY(-1px);
-  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+transform:scale(1.05);
 }
 
-button:active{
-  transform: scale(0.97);
+/* أزرار الحضور */
+
+.presentBtn{
+background:#2ecc71;
+color:white;
 }
 
-button.present{
-  background:#2ecc71;
+.absentBtn{
+background:#e74c3c;
+color:white;
 }
 
-button.absent{
-  background:#e74c3c;
+/* أزرار عامة */
+
+button{
+background:#3498db;
+color:white;
 }
 
-button.present:hover{
-  background:#27ae60;
-}
+/* سجل الحضور */
 
-button.absent:hover{
-  background:#c0392b;
-}
-
-/* قائمة المتربصين */
-select#traineeSelect{
-  height:140px;
-}
-
-/* قائمة السجل */
 ul{
-  list-style:none;
-  padding:0;
-  margin-top:10px;
+list-style:none;
+padding:0;
+margin-top:15px;
 }
 
 li{
-  background:#f7f9fc;
-  padding:10px;
-  margin-bottom:6px;
-  border-radius:8px;
-  border-left:4px solid #3498db;
-  font-size:14px;
+background:#f8f9fa;
+padding:10px;
+border-radius:8px;
+margin-bottom:8px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
 }
 
-/* فواصل */
-hr{
-  border:none;
-  height:1px;
-  background:#e6e6e6;
-  margin:20px 0;
+/* الألوان */
+
+.present{
+color:#27ae60;
+font-weight:bold;
 }
 
-/* عدد المتربصين */
-#countTrainees{
-  margin-top:5px;
-  color:#555;
-  font-size:14px;
+.absent{
+color:#e74c3c;
+font-weight:bold;
 }
 
-/* بطاقات الإحصائيات */
-.cards-container{
-  display:flex;
-  flex-wrap:wrap;
-  gap:15px;
-  margin-top:10px;
-}
+/* أزرار صغيرة */
 
-.stat-card{
-  flex:1 1 calc(50% - 15px);
-  background:#f4f6f8;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 4px 8px rgba(0,0,0,0.05);
-  text-align:center;
-  transition:0.2s;
-}
-
-.stat-card h3{
-  margin:0;
-  color:#2c3e50;
-  font-size:16px;
-}
-
-.stat-card p{
-  margin:5px 0 0 0;
-  font-size:18px;
-  font-weight:bold;
-}
-
-/* Dark Mode */
-.dark-mode{
-  background:#1e1f26;
-}
-
-.dark-mode .container{
-  background:#2b2d36;
-  color:white;
-}
-
-.dark-mode input,
-.dark-mode select{
-  background:#3a3c47;
-  color:white;
-  border:1px solid #555;
-}
-
-.dark-mode li{
-  background:#3a3c47;
-  border-left:4px solid #3498db;
-}
-
-.dark-mode h1,
-.dark-mode h2{
-  color:#f1f1f1;
-}
-
-.dark-mode button{
-  background:#2980b9;
-}
-
-.dark-mode button.present{
-  background:#27ae60;
-}
-
-.dark-mode button.absent{
-  background:#e74c3c;
-}
-
-/* استجابة الجوال */
-@media (max-width:600px){
-  .container{
-    margin:10px;
-    padding:20px;
-  }
-  button{
-    width:100%;
-    margin-top:5px;
-  }
-  .cards-container{
-    flex-direction:column;
-  }
-}
 li button{
-margin-right:10px;
 background:#f39c12;
+padding:5px 10px;
+font-size:12px;
+}
+
+/* الهاتف */
+
+@media(max-width:600px){
+
+.stats{
+flex-direction:column;
+}
+
+button{
+width:100%;
+}
+
 }
