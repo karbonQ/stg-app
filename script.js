@@ -72,7 +72,32 @@ function editSpecialty(){
     saveData();
     loadSpecialties();
 }
+function deleteSpecialty(){
 
+    let spec = specialtySelect.value;
+
+    if(!spec){
+        alert("اختر التخصص أولا");
+        return;
+    }
+
+    if(!confirm("هل تريد حذف هذا التخصص مع جميع المتربصين والسجلات؟")){
+        return;
+    }
+
+    // حذف التخصص
+    delete specialties[spec];
+
+    // حذف السجلات المرتبطة به
+    records = records.filter(r => r.specialty !== spec);
+
+    saveData();
+
+    loadSpecialties();
+    renderAttendance();
+    renderStats();
+    renderChart();
+}
 // إضافة متربص
 function addTrainee(){
     let name = document.getElementById("traineeName").value.trim();
