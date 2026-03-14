@@ -2,11 +2,12 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>برنامج تسيير الحضور و الغيابات</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الحضور</title>
 <link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
 <!-- نافذة تسجيل الدخول -->
 <div id="loginContainer">
     <h1>🔒 تسجيل الدخول</h1>
@@ -14,56 +15,68 @@
     <input type="password" id="password" placeholder="كلمة المرور">
     <button onclick="login()">تسجيل الدخول</button>
 </div>
-    <div class="container">
-<h1> الجمهورية الجزائرية الديمقراطية الشعبية</h1>
-    <h2> وزارة التكوين و التعليم المهنيين </h2>
-  <h2> مركز التكوين المهني و التمهين الشهيد أحمد زبانة السوقر </h2>
-<h1> برنامج تسيير الحضور و الغيابات</h1>
-<hr>
-<h2> التخصصات</h2>
-<select id="specialtySelect" onchange="loadTrainees()"></select>
-<input type="text" id="newSpecialty" placeholder="تخصص جديد">
-<button onclick="addSpecialty()">إضافة تخصص</button>
-<button onclick="editSpecialty()">تعديل اسم التخصص</button>
-<button onclick="deleteSpecialty()"> حذف التخصص</button>
-<hr>
 
-<h2> المتربصين</h2>
+<!-- واجهة التطبيق -->
+<div class="container">
 
-<input type="text" id="traineeName" placeholder="اسم المتربص">
-<button onclick="addTrainee()">إضافة متربص</button>
+    <h1>📋 تسجيل الحضور</h1>
+    <p class="subtitle">إدارة الحضور لمراكز التكوين</p>
 
-<select id="traineeSelect" size="6"></select>
-<br>
-<button onclick="editTrainee()">تعديل الاسم</button>
-<button onclick="deleteTrainee()">حذف المتربص</button>
-<p id="countTrainees"></p>
+    <!-- اختيار التخصص -->
+    <label>اختر التخصص:</label>
+    <select id="specialtySelect"></select>
+    <input type="text" id="newSpecialty" placeholder="اسم التخصص الجديد">
+    <button onclick="addSpecialty()">إضافة تخصص</button>
+    <button onclick="editSpecialty()">✏ تعديل التخصص</button>
+    <button onclick="deleteSpecialty()">🗑 حذف التخصص</button>
 
-<hr>
+    <hr>
 
-<h2>تسجيل الحضور</h2>
+    <!-- إضافة متربص -->
+    <label>اختر المتربص:</label>
+    <select id="traineeSelect"></select>
+    <input type="text" id="nameInput" placeholder="اسم المتربص">
+    <button onclick="addTrainee()">إضافة متربص</button>
+    <button onclick="editTrainee()">✏ تعديل متربص</button>
+    <button onclick="deleteTrainee()">🗑 حذف متربص</button>
 
-<input type="date" id="attendanceDate">
-<button onclick="markAttendance('حاضر')" class="present">✔ حضور</button>
-<button onclick="markAttendance('غائب')" class="absent">✖ غياب</button>
+    <hr>
 
-<button onclick="clearDayRecords()">🗑 مسح سجلات هذا اليوم</button>
-<hr>
+    <!-- اختيار التاريخ -->
+    <label>تاريخ تسجيل الحضور/الغياب:</label>
+    <input type="date" id="attendanceDate">
 
-<h2>أخر التسجلات </h2>
-<ul id="attendanceList"></ul>
-<button onclick="exportCSV()"> حفظ  </button>
-<hr>
-<h2>الإحصائيات</h2>
-<div id="statsCards" class="cards-container"></div>
-<h2> بيانات الحضور و الغياب</h2>
-<canvas id="attendanceChart"></canvas>
-<hr>
-<h2>البحــــث</h2>
-<input type="text" id="searchInput" placeholder="ابحث عن متربص أو تخصص" onkeyup="searchRecords()">
-<ul id="searchResults"></ul>
+    <!-- أزرار الحضور/الغياب -->
+    <div class="actions">
+        <button class="presentBtn" onclick="markAttendance('حاضر')">✔ حضور</button>
+        <button class="absentBtn" onclick="markAttendance('غائب')">✖ غياب</button>
+        <button onclick="clearDayRecords()">🗑 مسح سجلات اليوم</button>
+    </div>
 
+    <hr>
+
+    <!-- الإحصائيات -->
+    <div class="stats">
+        <div class="stat presentStat">
+            <span id="presentCount">0</span>
+            <small>حضور</small>
+        </div>
+        <div class="stat absentStat">
+            <span id="absentCount">0</span>
+            <small>غياب</small>
+        </div>
+        <div class="stat totalStat">
+            <span id="attendanceRate">0%</span>
+            <small>نسبة الحضور</small>
+        </div>
+    </div>
+
+    <!-- السجل -->
+    <ul id="attendanceList"></ul>
+
+    <button onclick="exportCSV()">📤 تصدير إلى Excel</button>
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>
