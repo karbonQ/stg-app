@@ -181,7 +181,25 @@ function renderAttendance(){
     });
 
 }
+function editStatus(i){
 
+    let newStatus = prompt("اكتب الحالة الجديدة: حاضر أو غائب");
+
+    if(!newStatus) return;
+
+    if(newStatus !== "حاضر" && newStatus !== "غائب"){
+        alert("اكتب فقط: حاضر أو غائب");
+        return;
+    }
+
+    records[i].status = newStatus;
+
+    saveData();
+
+    renderAttendance();
+    renderStats();
+    renderChart();
+}
 // تصدير CSV
 function exportCSV(){
     if(records.length===0) return;
@@ -192,7 +210,7 @@ function exportCSV(){
     let blob = new Blob([csv],{type:"text/csv;charset=utf-8;"});
     let link = document.createElement("a");
     link.href=URL.createObjectURL(blob);
-    link.download="attendance.csv";
+    link.download="تسجيل الحضور/الغياب.csv";
     link.click();
 }
 
@@ -297,22 +315,4 @@ function clearDayRecords(){
 
     alert("تم حذف سجلات هذا اليوم");
 }
-function editStatus(i){
 
-    let newStatus = prompt("اكتب الحالة الجديدة: حاضر أو غائب");
-
-    if(!newStatus) return;
-
-    if(newStatus !== "حاضر" && newStatus !== "غائب"){
-        alert("اكتب فقط: حاضر أو غائب");
-        return;
-    }
-
-    records[i].status = newStatus;
-
-    saveData();
-
-    renderAttendance();
-    renderStats();
-    renderChart();
-}
