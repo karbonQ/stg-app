@@ -1,3 +1,17 @@
+// بيانات تسجيل دخول ثابتة (يمكن تعديلها لاحقاً)
+const userData = {username:"admin", password:"1234"};
+
+function login(){
+    const u = document.getElementById("username").value.trim();
+    const p = document.getElementById("password").value.trim();
+
+    if(u===userData.username && p===userData.password){
+        alert("تم تسجيل الدخول بنجاح ✅");
+        document.body.classList.add("logged-in");
+    }else{
+        alert("اسم المستخدم أو كلمة المرور خاطئ ❌");
+    }
+}
 // بيانات التطبيق
 let specialties = JSON.parse(localStorage.getItem("specialties")) || {};
 let records = JSON.parse(localStorage.getItem("records")) || [];
