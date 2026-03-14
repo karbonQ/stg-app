@@ -1,6 +1,6 @@
 // بيانات تسجيل دخول ثابتة (يمكن تعديلها لاحقاً)
 const userData = {username:"admin", password:"1234"};
-
+document.body.classList.add("logged-in");
 function login(){
     const u = document.getElementById("username").value.trim();
     const p = document.getElementById("password").value.trim();
