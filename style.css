@@ -1,7 +1,7 @@
 /* قاعدة عامة */
 *{
   box-sizing:border-box;
-  font-family: 'Segoe UI', cairo;
+  font-family: 'Segoe UI', cairo, sans-serif;
 }
 
 body{
@@ -25,7 +25,7 @@ body{
 /* العناوين */
 h1{
   text-align:center;
-  margin-bottom:12px;
+  margin-bottom:20px;
   color:#2c3e50;
 }
 
