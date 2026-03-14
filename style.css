@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap');
+
+body{
+    font-family: 'Cairo', sans-serif;
+}
 *{
 box-sizing:border-box;
 font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -178,4 +183,18 @@ margin-top:15px;
 color:#2c3e50;
 border-bottom:2px solid #eee;
 padding-bottom:5px;
+}
+@media(max-width:600px){
+    .stats{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+        margin-bottom:5px;
+    }
+
+    li{
+        font-size:14px;
+    }
 }
