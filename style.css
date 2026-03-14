@@ -198,3 +198,47 @@ padding-bottom:5px;
         font-size:14px;
     }
 }
+/* نافذة تسجيل الدخول */
+#loginContainer{
+    width:95%;
+    max-width:400px;
+    margin:50px auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.15);
+    text-align:center;
+}
+
+#loginContainer input{
+    width:90%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:14px;
+}
+
+#loginContainer button{
+    width:50%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:8px;
+    border:none;
+    background:#3498db;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+#loginContainer button:hover{
+    background:#2980b9;
+}
+
+body.logged-in #loginContainer{
+    display:none;
+}
+body.logged-in .container{
+    display:block;
+}
