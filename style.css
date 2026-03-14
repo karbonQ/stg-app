@@ -1,7 +1,7 @@
 /* قاعدة عامة */
 *{
   box-sizing:border-box;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: 'Segoe UI', cairo;
 }
 
 body{
