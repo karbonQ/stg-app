@@ -529,4 +529,4 @@ specialtySelect.addEventListener("change",()=>{
     renderChart();
 
 });
-<script src="script.js"></script>
+
