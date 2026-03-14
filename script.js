@@ -53,7 +53,6 @@ function addTrainee(){
     saveData();
     loadTrainees();
 }
-
 // تحميل المتربصين حسب التخصص
 function loadTrainees(){
     let spec = specialtySelect.value;
@@ -230,4 +229,35 @@ function clearDayRecords(){
     renderChart();
 
     alert("تم حذف سجلات هذا اليوم");
+}
+function editSpecialty(){
+
+    let oldName = specialtySelect.value;
+
+    if(!oldName){
+        alert("اختر تخصص أولا");
+        return;
+    }
+
+    let newName = prompt("ادخل الاسم الجديد للتخصص:", oldName);
+
+    if(!newName || newName.trim()===""){
+        return;
+    }
+
+    // إنشاء تخصص جديد بنفس المتربصين
+    specialties[newName] = specialties[oldName];
+
+    // حذف التخصص القديم
+    delete specialties[oldName];
+
+    // تحديث السجلات القديمة
+    records.forEach(r=>{
+        if(r.specialty === oldName){
+            r.specialty = newName;
+        }
+    });
+
+    saveData();
+    loadSpecialties();
 }
