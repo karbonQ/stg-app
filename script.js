@@ -7,11 +7,12 @@ function login(){
 
     if(u===userData.username && p===userData.password){
         alert("تم تسجيل الدخول بنجاح ✅");
-        document.body.classList.add("logged-in");
+        document.body.classList.add("logged-in"); // هذا السطر يظهر التطبيق ويخفي نافذة الدخول
     }else{
         alert("اسم المستخدم أو كلمة المرور خاطئ ❌");
     }
 }
+
 // بيانات التطبيق
 let specialties = JSON.parse(localStorage.getItem("specialties")) || {};
 let records = JSON.parse(localStorage.getItem("records")) || [];
