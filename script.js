@@ -203,6 +203,7 @@ window.onload=function(){
     renderStats();
     renderChart();
 };
+
 function clearDayRecords(){
 
     const selectedDate = document.getElementById("attendanceDate").value;
