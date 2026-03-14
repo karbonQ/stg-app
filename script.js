@@ -1,417 +1,138 @@
-// بيانات تسجيل دخول ثابتة (يمكن تعديلها لاحقاً)
+// بيانات تسجيل دخول ثابتة
 const userData = {username:"admin", password:"1234"};
-document.body.classList.add("logged-in");
+
+// نافذة تسجيل الدخول
 function login(){
     const u = document.getElementById("username").value.trim();
     const p = document.getElementById("password").value.trim();
 
     if(u===userData.username && p===userData.password){
         alert("تم تسجيل الدخول بنجاح ✅");
-        document.body.classList.add("logged-in"); // هذا السطر يظهر التطبيق ويخفي نافذة الدخول
+        document.body.classList.add("logged-in");
     }else{
         alert("اسم المستخدم أو كلمة المرور خاطئ ❌");
     }
 }
 
-// بيانات التطبيق
+// البيانات
 let specialties = JSON.parse(localStorage.getItem("specialties")) || {};
 let records = JSON.parse(localStorage.getItem("records")) || [];
-
-const specialtySelect = document.getElementById("specialtySelect");
-const traineeSelect = document.getElementById("traineeSelect");
-const attendanceList = document.getElementById("attendanceList");
-const statsCards = document.getElementById("statsCards");
-const searchResults = document.getElementById("searchResults");
-
-// إذا لم توجد تخصصات نضع افتراضي
-if (!specialties || Object.keys(specialties).length === 0) {
-    specialties = {"تلقين الإعلام الآلي": []};
-}
+let specialtySelect = document.getElementById("specialtySelect");
+let traineeSelect = document.getElementById("traineeSelect");
+let attendanceList = document.getElementById("attendanceList");
 
 // حفظ البيانات
 function saveData(){
-    localStorage.setItem("specialties", JSON.stringify(specialties));
-    localStorage.setItem("records", JSON.stringify(records));
+    localStorage.setItem("specialties",JSON.stringify(specialties));
+    localStorage.setItem("records",JSON.stringify(records));
 }
 
-// تحميل التخصصات
+// تحميل التخصصات والمتربصين
 function loadSpecialties(){
     specialtySelect.innerHTML="";
     for(let spec in specialties){
-        let option = document.createElement("option");
-        option.value = spec;
-        option.textContent = spec;
+        let option=document.createElement("option");
+        option.textContent=spec;
         specialtySelect.appendChild(option);
     }
     loadTrainees();
-    renderStats();
 }
 
-// إضافة تخصص
-function addSpecialty(){
-    let name = document.getElementById("newSpecialty").value.trim();
-    if(name===""){ alert("اكتب اسم التخصص"); return; }
-    if(!specialties[name]) specialties[name]=[];
-    document.getElementById("newSpecialty").value="";
-    saveData();
-    loadSpecialties();
-}
-function editSpecialty(){
-
-    let oldName = specialtySelect.value;
-
-    if(!oldName){
-        alert("اختر تخصص أولا");
-        return;
-    }
-
-    let newName = prompt("ادخل الاسم الجديد للتخصص:", oldName);
-
-    if(!newName || newName.trim()===""){
-        return;
-    }
-
-    // إنشاء تخصص جديد بنفس المتربصين
-    specialties[newName] = specialties[oldName];
-
-    // حذف التخصص القديم
-    delete specialties[oldName];
-
-    // تحديث السجلات القديمة
-    records.forEach(r=>{
-        if(r.specialty === oldName){
-            r.specialty = newName;
-        }
-    });
-
-    saveData();
-    loadSpecialties();
-}
-function deleteSpecialty(){
-
-    let spec = specialtySelect.value;
-
-    if(!spec){
-        alert("اختر التخصص أولا");
-        return;
-    }
-
-    if(!confirm("هل تريد حذف هذا التخصص مع جميع المتربصين والسجلات؟")){
-        return;
-    }
-
-    // حذف التخصص
-    delete specialties[spec];
-
-    // حذف السجلات المرتبطة به
-    records = records.filter(r => r.specialty !== spec);
-
-    saveData();
-
-    loadSpecialties();
-    renderAttendance();
-    renderStats();
-    renderChart();
-}
-// إضافة متربص
-function addTrainee(){
-    let name = document.getElementById("traineeName").value.trim();
-    let spec = specialtySelect.value;
-    if(name===""){ alert("اكتب اسم المتربص"); return; }
-    if(!spec){ alert("اختر تخصص"); return; }
-    specialties[spec].push(name);
-    document.getElementById("traineeName").value="";
-    saveData();
-    loadTrainees();
-}
-// تحميل المتربصين حسب التخصص
 function loadTrainees(){
-    let spec = specialtySelect.value;
     traineeSelect.innerHTML="";
-    if(!spec || !specialties[spec]) return;
-    specialties[spec].forEach(name=>{
-        let option = document.createElement("option");
-        option.textContent=name;
-        traineeSelect.appendChild(option);
-    });
-    document.getElementById("countTrainees").textContent=
-        "عدد المتربصين في هذا التخصص: "+specialties[spec].length;
-}
-
-// تعديل متربص
-function editTrainee(){
     let spec = specialtySelect.value;
-    let oldName = traineeSelect.value;
-    if(!oldName) return;
-
-    let newName = prompt("الاسم الجديد:", oldName);
-    if(!newName) return;
-
-    if(confirm(`هل أنت متأكد أنك تريد تعديل المتربص "${oldName}" إلى "${newName}"؟`)){
-        specialties[spec] = specialties[spec].map(t=>t===oldName?newName:t);
-
-        // تحديث السجلات القديمة
-        records.forEach(r=>{
-            if(r.name === oldName && r.specialty === spec){
-                r.name = newName;
-            }
+    if(spec && specialties[spec]){
+        specialties[spec].forEach(name=>{
+            let option=document.createElement("option");
+            option.textContent=name;
+            traineeSelect.appendChild(option);
         });
-
-        saveData();
-        loadTrainees();
-        renderAttendance();
-        alert("تم تعديل المتربص بنجاح ✅");
     }
 }
 
-// حذف متربص
-function deleteTrainee(){
-    let spec = specialtySelect.value;
-    let name = traineeSelect.value;
-    if(!name) return;
+// إدارة التخصصات
+function addSpecialty(){ let name=document.getElementById("newSpecialty").value.trim(); if(!name) return; if(specialties[name]){alert("التخصص موجود!");return;} specialties[name]=[]; saveData(); loadSpecialties(); alert("تم إضافة التخصص ✅"); }
+function editSpecialty(){ let oldName=specialtySelect.value; if(!oldName) return; let newName=prompt("الاسم الجديد للتخصص:",oldName); if(!newName) return; if(confirm(`تعديل "${oldName}" إلى "${newName}"؟`)){ specialties[newName]=specialties[oldName]; delete specialties[oldName]; records.forEach(r=>{ if(r.specialty===oldName) r.specialty=newName; }); saveData(); loadSpecialties(); alert("تم تعديل التخصص ✅"); } }
+function deleteSpecialty(){ let spec=specialtySelect.value; if(!spec) return; if(confirm(`حذف "${spec}" وكل المتربصين والسجلات؟`)){ delete specialties[spec]; records=records.filter(r=>r.specialty!==spec); saveData(); loadSpecialties(); renderAttendance(); alert("تم حذف التخصص 🗑️"); } }
 
-    if(confirm(`هل أنت متأكد أنك تريد حذف المتربص "${name}"؟`)){
-        specialties[spec] = specialties[spec].filter(t=>t!==name);
+// إدارة المتربصين
+function addTrainee(){ let name=document.getElementById("nameInput").value.trim(); let spec=specialtySelect.value; if(!name || !spec) return; if(specialties[spec].includes(name)) return; specialties[spec].push(name); saveData(); loadTrainees(); alert("تم إضافة المتربص ✅"); }
+function editTrainee(){ let spec=specialtySelect.value; let oldName=traineeSelect.value; if(!oldName) return; let newName=prompt("الاسم الجديد:",oldName); if(!newName) return; if(confirm(`تعديل "${oldName}" إلى "${newName}"؟`)){ specialties[spec]=specialties[spec].map(t=>t===oldName?newName:t); records.forEach(r=>{if(r.name===oldName && r.specialty===spec) r.name=newName;}); saveData(); loadTrainees(); renderAttendance(); alert("تم تعديل المتربص ✅"); } }
+function deleteTrainee(){ let spec=specialtySelect.value; let name=traineeSelect.value; if(!name) return; if(confirm(`حذف المتربص "${name}"؟`)){ specialties[spec]=specialties[spec].filter(t=>t!==name); records=records.filter(r=>!(r.name===name && r.specialty===spec)); saveData(); loadTrainees(); renderAttendance(); alert("تم حذف المتربص 🗑️"); } }
 
-        // حذف سجلاته
-        records = records.filter(r=>!(r.name===name && r.specialty===spec));
-
-        saveData();
-        loadTrainees();
-        renderAttendance();
-        renderStats();
-        renderChart();
-        alert("تم حذف المتربص بنجاح 🗑️");
-    }
+// تسجيل حضور/غياب
+function markAttendance(status){ 
+    let name=traineeSelect.value; let spec=specialtySelect.value; let date=document.getElementById("attendanceDate").value; 
+    if(!name || !date) return; 
+    records.push({name:name,specialty:spec,status:status,date:date}); 
+    saveData(); renderAttendance(); updateStats(); 
 }
 
-// تسجيل الحضور/الغياب
-function markAttendance(status){
-    let trainee = traineeSelect.value;
-    let spec = specialtySelect.value;
-    let date = document.getElementById("attendanceDate").value;
-    if(!trainee||!date){ alert("اختر المتربص والتاريخ"); return; }
-    records.push({name:trainee,specialty:spec,status:status,date:date});
-    saveData();
-    renderAttendance();
-    renderStats();
-    renderChart();
+// مسح سجلات اليوم
+function clearDayRecords(){ 
+    let date=document.getElementById("attendanceDate").value; 
+    if(!date){alert("اختر التاريخ");return;} 
+    if(confirm("مسح جميع سجلات هذا اليوم؟")){ records=records.filter(r=>r.date!==date); saveData(); renderAttendance(); updateStats(); alert("تم مسح سجلات اليوم 🗑️");} 
 }
 
-// عرض آخر السجلات
+// تعديل الحالة سريع
+function toggleStatus(i){ records[i].status=records[i].status==="حاضر"?"غائب":"حاضر"; saveData(); renderAttendance(); updateStats(); }
+
+// الإحصائيات
+function updateStats(){ 
+    let spec=specialtySelect.value; 
+    let filtered=records.filter(r=>r.specialty===spec); 
+    let present=filtered.filter(r=>r.status==="حاضر").length; 
+    let absent=filtered.filter(r=>r.status==="غائب").length; 
+    let total=present+absent; 
+    document.getElementById("presentCount").textContent=present; 
+    document.getElementById("absentCount").textContent=absent; 
+    document.getElementById("attendanceRate").textContent=total===0?"0%":Math.round((present/total)*100)+"%";
+}
+
+// عرض السجلات مجمعة حسب التاريخ
 function renderAttendance(){
-
-    attendanceList.innerHTML = "";
-
-    const currentSpecialty = specialtySelect.value;
-
-    const filtered = records.filter(r => r.specialty === currentSpecialty);
-
-    // تجميع السجلات حسب التاريخ
-    let grouped = {};
-
-    filtered.forEach(r=>{
-        if(!grouped[r.date]){
-            grouped[r.date] = [];
-        }
-        grouped[r.date].push(r);
-    });
-
-    // ترتيب التواريخ
-    const dates = Object.keys(grouped).reverse();
-
-    dates.forEach(date=>{
-
-        let title = document.createElement("h3");
-        title.innerHTML = "📅 " + date;
+    attendanceList.innerHTML="";
+    let spec=specialtySelect.value;
+    let filtered=records.filter(r=>r.specialty===spec);
+    let grouped={};
+    filtered.forEach(r=>{ if(!grouped[r.date]) grouped[r.date]=[]; grouped[r.date].push(r); });
+    Object.keys(grouped).sort().reverse().forEach(date=>{
+        let title=document.createElement("h3");
+        title.innerHTML="📅 "+date;
         attendanceList.appendChild(title);
-
         grouped[date].forEach(r=>{
-
-            let li = document.createElement("li");
-
-            let color = r.status === "حاضر" ? "green" : "red";
-
-            let index = records.indexOf(r);
-
-            li.innerHTML = `
-            ${r.name} 
-            <span style="color:${color};font-weight:bold">
-            ${r.status}
-            </span>
-
-            <button onclick="toggleStatus(${index})">🔁</button>
-            `;
-
+            let li=document.createElement("li");
+            let color=r.status==="حاضر"?"green":"red";
+            let idx=records.indexOf(r);
+            li.innerHTML=`${r.name} <span style="color:${color};font-weight:bold">${r.status}</span> <button onclick="toggleStatus(${idx})">🔁</button>`;
             attendanceList.appendChild(li);
-
         });
-
     });
-
 }
-function editStatus(i){
 
-    let newStatus = prompt("اكتب الحالة الجديدة: حاضر أو غائب");
-
-    if(!newStatus) return;
-
-    if(newStatus !== "حاضر" && newStatus !== "غائب"){
-        alert("اكتب فقط: حاضر أو غائب");
-        return;
-    }
-
-    records[i].status = newStatus;
-
-    saveData();
-
-    renderAttendance();
-    renderStats();
-    renderChart();
-}
-function toggleStatus(i){
-
-    if(records[i].status === "حاضر"){
-        records[i].status = "غائب";
-    }else{
-        records[i].status = "حاضر";
-    }
-
-    saveData();
-
-    renderAttendance();
-    renderStats();
-    renderChart();
-}
 // تصدير CSV
 function exportCSV(){
-
-    if(records.length === 0){
-        alert("لا يوجد سجل للتصدير");
-        return;
-    }
-
-    let csv = "\uFEFFالاسم واللقب,الحالة,التاريخ\n";
-
-    records.forEach(r => {
-
-        csv += `"${r.name}","${r.status}","${r.date}"\n`;
-
-    });
-
-    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
-
-    const link = document.createElement("a");
-
-    link.href = URL.createObjectURL(blob);
-
-    link.download = "سجل_الحضور.csv";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
+    if(records.length===0){ alert("لا يوجد سجل للتصدير"); return; }
+    let csv="\uFEFFالاسم واللقب,التخصص,الحالة,التاريخ\n";
+    records.forEach(r=>{ csv+=`"${r.name}","${r.specialty}","${r.status}","${r.date}"\n`; });
+    let blob=new Blob([csv],{type:"text/csv;charset=utf-8;"}); 
+    let link=document.createElement("a"); 
+    link.href=URL.createObjectURL(blob); 
+    link.download="سجل_الحضور.csv"; 
+    document.body.appendChild(link); 
+    link.click(); 
+    document.body.removeChild(link); 
 }
 
-// عرض إحصائيات لكل تخصص
-function renderStats(){
-    statsCards.innerHTML="";
-    for(let spec in specialties){
-        let present = records.filter(r=>r.specialty===spec && r.status==='حاضر').length;
-        let absent = records.filter(r=>r.specialty===spec && r.status==='غائب').length;
-        let total = present+absent;
-        let rate = total===0 ? 0 : Math.round((present/total)*100);
-        let card = document.createElement("div");
-        card.className="stat-card";
-        card.innerHTML=`<h3>${spec}</h3>
-                        <p>حاضر: ${present} | غائب: ${absent} | نسبة الحضور: ${rate}%</p>`;
-        statsCards.appendChild(card);
-    }
-}
-
-// رسم بياني للحضور/الغياب
-let chart;
-function renderChart(){
-    const ctx = document.getElementById("attendanceChart").getContext("2d");
-    let labels = Object.keys(specialties);
-    let presentData = labels.map(spec => records.filter(r=>r.specialty===spec && r.status==='حاضر').length);
-    let absentData = labels.map(spec => records.filter(r=>r.specialty===spec && r.status==='غائب').length);
-    if(chart) chart.destroy();
-    chart = new Chart(ctx,{
-        type:'bar',
-        data:{
-            labels: labels,
-            datasets:[
-                {label:'حاضر', data:presentData, backgroundColor:'#2ecc71'},
-                {label:'غائب', data:absentData, backgroundColor:'#e74c3c'}
-            ]
-        },
-        options:{
-            responsive:true,
-            plugins:{legend:{position:'top'}}
-        }
-    });
-}
-
-// بحث سريع
-function searchRecords(){
-    const term = document.getElementById("searchInput").value.trim();
-    searchResults.innerHTML="";
-    if(term==="") return;
-    let filtered = records.filter(r=>r.name.includes(term)||r.specialty.includes(term));
-    filtered.forEach(r=>{
-        let li=document.createElement("li");
-        li.textContent=r.date+" | "+r.specialty+" | "+r.name+" | "+r.status;
-        searchResults.appendChild(li);
-    });
-}
-
-// Dark Mode
-function toggleTheme(){
-    document.body.classList.toggle("dark-mode");
-    if(document.body.classList.contains("dark-mode")){
-        localStorage.setItem("theme","dark");
-    }else{
-        localStorage.setItem("theme","light");
-    }
-}
-
-function loadTheme(){
-    let theme = localStorage.getItem("theme");
-    if(theme==="dark") document.body.classList.add("dark-mode");
-}
-
-// عند تحميل الصفحة
+// تحميل البيانات عند فتح الصفحة
 window.onload=function(){
-    loadTheme();
+    if(!Object.keys(specialties).length){ specialties={"تلقين الإعلام الآلي":[]} ; saveData(); }
     loadSpecialties();
     renderAttendance();
-    renderStats();
-    renderChart();
-};
-function clearDayRecords(){
-
-    const selectedDate = document.getElementById("attendanceDate").value;
-
-    if(!selectedDate){
-        alert("اختر التاريخ أولا");
-        return;
-    }
-
-    if(!confirm("هل تريد حذف سجلات هذا اليوم؟")){
-        return;
-    }
-    // تحويل التاريخ الى الصيغة الثانية
-    const parts = selectedDate.split("-");
-    const altDate = parts.reverse().join("-");
-    // حذف السجلات المطابقة للتاريخين
-    records = records.filter(r => r.date !== selectedDate && r.date !== altDate);
-    saveData();
-    renderAttendance();
-    renderStats();
-    renderChart();
-
-    alert("تم حذف سجلات هذا اليوم");
+    updateStats();
 }
-specialtySelect.addEventListener("change", renderAttendance);
+
+specialtySelect.addEventListener("change",()=>{
+    loadTrainees(); renderAttendance(); updateStats();
+});
