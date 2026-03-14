@@ -20,7 +20,7 @@ direction:rtl;
 }
 
 .container{
-    {display:none;}
+    display:none;
 width:95%;
 max-width:850px;
 background:white;
