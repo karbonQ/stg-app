@@ -203,3 +203,26 @@ window.onload=function(){
     renderStats();
     renderChart();
 };
+function clearDayRecords(){
+
+    const selectedDate = document.getElementById("attendanceDate").value;
+
+    if(!selectedDate){
+        alert("اختر التاريخ أولا");
+        return;
+    }
+
+    if(!confirm("هل تريد حذف جميع سجلات هذا اليوم؟")){
+        return;
+    }
+
+    records = records.filter(r => r.date !== selectedDate);
+
+    saveData();
+
+    renderAttendance();
+    renderStats();
+    renderChart();
+
+    alert("تم حذف سجلات هذا اليوم بنجاح");
+}
