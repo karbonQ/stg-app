@@ -243,3 +243,15 @@ body.logged-in #loginContainer{
 body.logged-in .container{
     display:block;
 }
+/* اخفاء التطبيق افتراضياً */
+.container{
+    display:none;
+}
+
+/* عند تسجيل الدخول يظهر التطبيق ويختفي نافذة الدخول */
+body.logged-in #loginContainer{
+    display:none;
+}
+body.logged-in .container{
+    display:block;
+}
