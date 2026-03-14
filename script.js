@@ -165,14 +165,18 @@ function renderAttendance(){
 
     records.slice(-10).reverse().forEach((r,index)=>{
 
+        let realIndex = records.length - 1 - index;
+
         let li = document.createElement("li");
+
+        let statusColor = r.status === "حاضر" ? "green" : "red";
 
         li.innerHTML = `
         ${r.date} | ${r.specialty} | ${r.name} | 
-        <b>${r.status}</b>
+        <b style="color:${statusColor}">${r.status}</b>
 
-        <button onclick="editStatus(${records.length-1-index})">
-        تعديل
+        <button onclick="toggleStatus(${realIndex})">
+        🔁
         </button>
         `;
 
@@ -193,6 +197,20 @@ function editStatus(i){
     }
 
     records[i].status = newStatus;
+
+    saveData();
+
+    renderAttendance();
+    renderStats();
+    renderChart();
+}
+function toggleStatus(i){
+
+    if(records[i].status === "حاضر"){
+        records[i].status = "غائب";
+    }else{
+        records[i].status = "حاضر";
+    }
 
     saveData();
 
