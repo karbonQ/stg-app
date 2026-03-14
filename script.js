@@ -1,6 +1,6 @@
 
 //بيانات تسجيل دخول ثابتة
-const userData = {username:"1", password:"1"};
+const userData = {username:"admin", password:"1234"};
 let attendanceChart;
 // نافذة تسجيل الدخول
 function login(){
