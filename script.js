@@ -128,5 +128,5 @@ window.onload=function(){
 }
 
 specialtySelect.addEventListener("change",()=>{
-    loadTrainees(); renderAttendance();
+    loadTrainees(); renderAttendance(); renderChart();
 });
