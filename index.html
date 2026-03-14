@@ -9,72 +9,68 @@
 <body>
 
 <!-- نافذة تسجيل الدخول -->
-    <div id="app" style="display:none;">
-
-<!-- هنا التطبيق كامل -->
-
-</div>
 <div id="loginPage">
-
-<h2>تسجيل الدخول</h2>
-
-<input type="text" id="username" placeholder="اسم المستخدم">
-
-<input type="password" id="password" placeholder="كلمة المرور">
-
-<button onclick="login()">دخول</button>
-
+    <h2>تسجيل الدخول</h2>
+    <input type="text" id="username" placeholder="اسم المستخدم">
+    <input type="password" id="password" placeholder="كلمة المرور">
+    <button onclick="login()">دخول</button>
 </div>
 
-<!-- واجهة التطبيق -->
-<div class="container">
+<!-- التطبيق الرئيسي -->
+<div id="app" style="display:none;">
+    <div class="container">
 
-    <h1>📋 تسجيل الحضور</h1>
-    <p class="subtitle">إدارة الحضور لمراكز التكوين</p>
+        <h1>📋 تسجيل الحضور</h1>
+        <p class="subtitle">إدارة الحضور لمراكز التكوين</p>
 
-    <!-- اختيار التخصص -->
-    <label>اختر التخصص:</label>
-    <select id="specialtySelect"></select>
-    <input type="text" id="newSpecialty" placeholder="اسم التخصص الجديد">
-    <button onclick="addSpecialty()">إضافة تخصص</button>
-    <button onclick="editSpecialty()">✏ تعديل التخصص</button>
-    <button onclick="deleteSpecialty()">🗑 حذف التخصص</button>
+        <!-- اختيار التخصص -->
+        <label>اختر التخصص:</label>
+        <select id="specialtySelect"></select>
+        <input type="text" id="newSpecialty" placeholder="اسم التخصص الجديد">
+        <button onclick="addSpecialty()">إضافة تخصص</button>
+        <button onclick="editSpecialty()">✏ تعديل التخصص</button>
+        <button onclick="deleteSpecialty()">🗑 حذف التخصص</button>
 
-    <hr>
+        <hr>
 
-    <!-- إضافة متربص -->
-    <label>اختر المتربص:</label>
-    <select id="traineeSelect"></select>
-    <input type="text" id="nameInput" placeholder="اسم المتربص">
-    <button onclick="addTrainee()">إضافة متربص</button>
-    <button onclick="editTrainee()">✏ تعديل متربص</button>
-    <button onclick="deleteTrainee()">🗑 حذف متربص</button>
+        <!-- إضافة متربص -->
+        <label>اختر المتربص:</label>
+        <select id="traineeSelect"></select>
+        <input type="text" id="nameInput" placeholder="اسم المتربص">
+        <button onclick="addTrainee()">إضافة متربص</button>
+        <button onclick="editTrainee()">✏ تعديل متربص</button>
+        <button onclick="deleteTrainee()">🗑 حذف متربص</button>
 
-    <hr>
+        <hr>
 
-    <!-- اختيار التاريخ -->
-    <label>تاريخ تسجيل الحضور/الغياب:</label>
-    <input type="date" id="attendanceDate">
+        <!-- اختيار التاريخ -->
+        <label>تاريخ تسجيل الحضور/الغياب:</label>
+        <input type="date" id="attendanceDate">
 
-    <!-- أزرار الحضور/الغياب -->
-    <div class="actions">
-        <button class="presentBtn" onclick="markAttendance('حاضر')">✔ حضور</button>
-        <button class="absentBtn" onclick="markAttendance('غائب')">✖ غياب</button>
-        <button onclick="clearDayRecords()">🗑 مسح سجلات اليوم</button>
+        <!-- أزرار الحضور/الغياب -->
+        <div class="actions">
+            <button class="presentBtn" onclick="markAttendance('حاضر')">✔ حضور</button>
+            <button class="absentBtn" onclick="markAttendance('غائب')">✖ غياب</button>
+            <button onclick="clearDayRecords()">🗑 مسح سجلات اليوم</button>
+        </div>
+
+        <hr>
+
+        <!-- الرسم البياني -->
+        <h3>📊 إحصائيات الحضور</h3>
+        <div class="chartBox">
+            <canvas id="attendanceChart"></canvas>
+        </div>
+
+        <!-- السجل -->
+        <ul id="attendanceList"></ul>
+
+        <button onclick="exportCSV()">📤 تصدير إلى Excel</button>
+
     </div>
-
-    <hr>
-
-    <!-- الإحصائيات -->
-<h3>📊 إحصائيات الحضور</h3>
-<div class="chartBox">
-    <canvas id="attendanceChart"></canvas>
 </div>
-    <!-- السجل -->
-    <ul id="attendanceList"></ul>
 
-    <button onclick="exportCSV()">📤 تصدير إلى Excel</button>
-</div>
+<!-- مكتبة الرسم -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 </body>
