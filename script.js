@@ -203,7 +203,6 @@ window.onload=function(){
     renderStats();
     renderChart();
 };
-
 function clearDayRecords(){
 
     const selectedDate = document.getElementById("attendanceDate").value;
@@ -213,11 +212,16 @@ function clearDayRecords(){
         return;
     }
 
-    if(!confirm("هل تريد حذف جميع سجلات هذا اليوم؟")){
+    if(!confirm("هل تريد حذف سجلات هذا اليوم؟")){
         return;
     }
 
-    records = records.filter(r => r.date !== selectedDate);
+    // تحويل التاريخ الى الصيغة الثانية
+    const parts = selectedDate.split("-");
+    const altDate = parts.reverse().join("-");
+
+    // حذف السجلات المطابقة للتاريخين
+    records = records.filter(r => r.date !== selectedDate && r.date !== altDate);
 
     saveData();
 
@@ -225,5 +229,5 @@ function clearDayRecords(){
     renderStats();
     renderChart();
 
-    alert("تم حذف سجلات هذا اليوم بنجاح");
+    alert("تم حذف سجلات هذا اليوم");
 }
