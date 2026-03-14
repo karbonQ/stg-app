@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>لوحة إدارة الحضور</title>
+<title>برنامج تسيير الحضور و الغيابات</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -16,7 +16,7 @@
 
 <hr>
 
-<h2>إدارة التخصصات</h2>
+<h2> التخصصات</h2>
 
 <select id="specialtySelect" onchange="loadTrainees()"></select>
 <input type="text" id="newSpecialty" placeholder="تخصص جديد">
@@ -24,7 +24,7 @@
 
 <hr>
 
-<h2>إدارة المتربصين</h2>
+<h2> المتربصين</h2>
 
 <input type="text" id="traineeName" placeholder="اسم المتربص">
 <button onclick="addTrainee()">إضافة متربص</button>
@@ -42,7 +42,10 @@
 <input type="date" id="attendanceDate">
 <button onclick="markAttendance('حاضر')" class="present">✅ حاضر</button>
 <button onclick="markAttendance('غائب')" class="absent">❌ غائب</button>
+<button onclick="markAttendance('حاضر')" class="present">✔ حضور</button>
+<button onclick="markAttendance('غائب')" class="absent">✖ غياب</button>
 
+<button onclick="clearDayRecords()">🗑 مسح سجلات هذا اليوم</button>
 <hr>
 
 <h2>السجل الأخير</h2>
