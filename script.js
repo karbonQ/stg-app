@@ -160,12 +160,26 @@ function markAttendance(status){
 
 // عرض آخر السجلات
 function renderAttendance(){
+
     attendanceList.innerHTML="";
-    records.slice(-10).reverse().forEach(r=>{
+
+    records.slice(-10).reverse().forEach((r,index)=>{
+
         let li = document.createElement("li");
-        li.textContent = r.date+" | "+r.specialty+" | "+r.name+" | "+r.status;
+
+        li.innerHTML = `
+        ${r.date} | ${r.specialty} | ${r.name} | 
+        <b>${r.status}</b>
+
+        <button onclick="editStatus(${records.length-1-index})">
+        تعديل
+        </button>
+        `;
+
         attendanceList.appendChild(li);
+
     });
+
 }
 
 // تصدير CSV
@@ -282,4 +296,23 @@ function clearDayRecords(){
     renderChart();
 
     alert("تم حذف سجلات هذا اليوم");
+}
+function editStatus(i){
+
+    let newStatus = prompt("اكتب الحالة الجديدة: حاضر أو غائب");
+
+    if(!newStatus) return;
+
+    if(newStatus !== "حاضر" && newStatus !== "غائب"){
+        alert("اكتب فقط: حاضر أو غائب");
+        return;
+    }
+
+    records[i].status = newStatus;
+
+    saveData();
+
+    renderAttendance();
+    renderStats();
+    renderChart();
 }
