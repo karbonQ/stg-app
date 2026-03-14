@@ -1,4 +1,5 @@
-// بيانات تسجيل دخول ثابتة
+let attendanceChart;
+//بيانات تسجيل دخول ثابتة
 const userData = {username:"admin", password:"1234"};
 
 // نافذة تسجيل الدخول
@@ -12,6 +13,7 @@ function login(){
     }else{
         alert("اسم المستخدم أو كلمة المرور خاطئ ❌");
     }
+    renderChart();
 }
 
 // البيانات
@@ -65,29 +67,21 @@ function markAttendance(status){
     let name=traineeSelect.value; let spec=specialtySelect.value; let date=document.getElementById("attendanceDate").value; 
     if(!name || !date) return; 
     records.push({name:name,specialty:spec,status:status,date:date}); 
-    saveData(); renderAttendance(); updateStats(); 
+    saveData(); renderAttendance();updateStats();renderChart();
 }
 
 // مسح سجلات اليوم
 function clearDayRecords(){ 
     let date=document.getElementById("attendanceDate").value; 
     if(!date){alert("اختر التاريخ");return;} 
-    if(confirm("مسح جميع سجلات هذا اليوم؟")){ records=records.filter(r=>r.date!==date); saveData(); renderAttendance(); updateStats(); alert("تم مسح سجلات اليوم 🗑️");} 
+    if(confirm("مسح جميع سجلات هذا اليوم؟")){ records=records.filter(r=>r.date!==date); saveData(); renderAttendance(); alert("تم مسح سجلات اليوم 🗑️");} 
 }
 
 // تعديل الحالة سريع
-function toggleStatus(i){ records[i].status=records[i].status==="حاضر"?"غائب":"حاضر"; saveData(); renderAttendance(); updateStats(); }
+function toggleStatus(i){ records[i].status=records[i].status==="حاضر"?"غائب":"حاضر"; saveData(); renderAttendance();}
 
 // الإحصائيات
-function updateStats(){ 
-    let spec=specialtySelect.value; 
-    let filtered=records.filter(r=>r.specialty===spec); 
-    let present=filtered.filter(r=>r.status==="حاضر").length; 
-    let absent=filtered.filter(r=>r.status==="غائب").length; 
-    let total=present+absent; 
-    document.getElementById("presentCount").textContent=present; 
-    document.getElementById("absentCount").textContent=absent; 
-    document.getElementById("attendanceRate").textContent=total===0?"0%":Math.round((present/total)*100)+"%";
+
 }
 
 // عرض السجلات مجمعة حسب التاريخ
@@ -130,9 +124,9 @@ window.onload=function(){
     if(!Object.keys(specialties).length){ specialties={"تلقين الإعلام الآلي":[]} ; saveData(); }
     loadSpecialties();
     renderAttendance();
-    updateStats();
+
 }
 
 specialtySelect.addEventListener("change",()=>{
-    loadTrainees(); renderAttendance(); updateStats();
+    loadTrainees(); renderAttendance();
 });
