@@ -439,22 +439,33 @@ function renderChart(){
 
     }
 
-    attendanceChart=new Chart(ctx,{
+   attendanceChart=new Chart(ctx,{
 
-        type:"doughnut",
+type:"bar",
 
-        data:{
+data:{
+labels:["حضور","غياب"],
 
-            labels:["حضور","غياب"],
+datasets:[{
+label:"عدد المتربصين",
+data:[present,absent],
+backgroundColor:["#2ecc71","#e74c3c"]
+}]
+},
 
-            datasets:[{
-
-                data:[present,absent],
-
-                backgroundColor:["#2ecc71","#e74c3c"]
-
-            }]
-
+options:{
+responsive:true,
+plugins:{
+legend:{display:false}
+},
+scales:{
+y:{
+beginAtZero:true,
+ticks:{precision:0}
+}
+}
+}
+});
         },
 
         options:{
