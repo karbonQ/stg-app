@@ -7,7 +7,14 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div class="container">
+<!-- نافذة تسجيل الدخول -->
+<div id="loginContainer">
+    <h1>🔒 تسجيل الدخول</h1>
+    <input type="text" id="username" placeholder="اسم المستخدم">
+    <input type="password" id="password" placeholder="كلمة المرور">
+    <button onclick="login()">تسجيل الدخول</button>
+</div>
+    <div class="container">
 <h1> الجمهورية الجزائرية الديمقراطية الشعبية</h1>
     <h2> وزارة التكوين و التعليم المهنيين </h2>
   <h2> مركز التكوين المهني و التمهين الشهيد أحمد زبانة السوقر </h2>
@@ -43,7 +50,7 @@
 <button onclick="clearDayRecords()">🗑 مسح سجلات هذا اليوم</button>
 <hr>
 
-<h2>السجل الأخير</h2>
+<h2>أخر التسجلات </h2>
 <ul id="attendanceList"></ul>
 <button onclick="exportCSV()"> حفظ  </button>
 <hr>
