@@ -56,27 +56,16 @@
     <hr>
 
     <!-- الإحصائيات -->
-    <div class="stats">
-        <div class="stat presentStat">
-            <span id="presentCount">0</span>
-            <small>حضور</small>
-        </div>
-        <div class="stat absentStat">
-            <span id="absentCount">0</span>
-            <small>غياب</small>
-        </div>
-        <div class="stat totalStat">
-            <span id="attendanceRate">0%</span>
-            <small>نسبة الحضور</small>
-        </div>
-    </div>
-
+<h3>📊 إحصائيات الحضور</h3>
+<div class="chartBox">
+    <canvas id="attendanceChart"></canvas>
+</div>
     <!-- السجل -->
     <ul id="attendanceList"></ul>
 
     <button onclick="exportCSV()">📤 تصدير إلى Excel</button>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
