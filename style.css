@@ -210,3 +210,7 @@ hr{
     flex-direction:column;
   }
 }
+li button{
+margin-right:10px;
+background:#f39c12;
+}
