@@ -220,16 +220,33 @@ function toggleStatus(i){
 }
 // تصدير CSV
 function exportCSV(){
-    if(records.length===0) return;
-    let csv="\uFEFFالتاريخ,التخصص,الاسم,الحالة\n";
-    records.forEach(r=>{
-        csv+=`${r.date},${r.specialty},${r.name},${r.status}\n`;
+
+    if(records.length === 0){
+        alert("لا يوجد سجل للتصدير");
+        return;
+    }
+
+    let csv = "\uFEFFالاسم واللقب,الحالة,التاريخ\n";
+
+    records.forEach(r => {
+
+        csv += `"${r.name}","${r.status}","${r.date}"\n`;
+
     });
-    let blob = new Blob([csv],{type:"text/csv;charset=utf-8;"});
-    let link = document.createElement("a");
-    link.href=URL.createObjectURL(blob);
-    link.download="تسجيل الحضور/الغياب.csv";
+
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+
+    link.download = "سجل_الحضور.csv";
+
+    document.body.appendChild(link);
+
     link.click();
+
+    document.body.removeChild(link);
 }
 
 // عرض إحصائيات لكل تخصص
