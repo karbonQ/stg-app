@@ -41,6 +41,37 @@ function addSpecialty(){
     saveData();
     loadSpecialties();
 }
+function editSpecialty(){
+
+    let oldName = specialtySelect.value;
+
+    if(!oldName){
+        alert("اختر تخصص أولا");
+        return;
+    }
+
+    let newName = prompt("ادخل الاسم الجديد للتخصص:", oldName);
+
+    if(!newName || newName.trim()===""){
+        return;
+    }
+
+    // إنشاء تخصص جديد بنفس المتربصين
+    specialties[newName] = specialties[oldName];
+
+    // حذف التخصص القديم
+    delete specialties[oldName];
+
+    // تحديث السجلات القديمة
+    records.forEach(r=>{
+        if(r.specialty === oldName){
+            r.specialty = newName;
+        }
+    });
+
+    saveData();
+    loadSpecialties();
+}
 
 // إضافة متربص
 function addTrainee(){
@@ -218,46 +249,12 @@ function clearDayRecords(){
     // تحويل التاريخ الى الصيغة الثانية
     const parts = selectedDate.split("-");
     const altDate = parts.reverse().join("-");
-
     // حذف السجلات المطابقة للتاريخين
     records = records.filter(r => r.date !== selectedDate && r.date !== altDate);
-
     saveData();
-
     renderAttendance();
     renderStats();
     renderChart();
 
     alert("تم حذف سجلات هذا اليوم");
-}
-function editSpecialty(){
-
-    let oldName = specialtySelect.value;
-
-    if(!oldName){
-        alert("اختر تخصص أولا");
-        return;
-    }
-
-    let newName = prompt("ادخل الاسم الجديد للتخصص:", oldName);
-
-    if(!newName || newName.trim()===""){
-        return;
-    }
-
-    // إنشاء تخصص جديد بنفس المتربصين
-    specialties[newName] = specialties[oldName];
-
-    // حذف التخصص القديم
-    delete specialties[oldName];
-
-    // تحديث السجلات القديمة
-    records.forEach(r=>{
-        if(r.specialty === oldName){
-            r.specialty = newName;
-        }
-    });
-
-    saveData();
-    loadSpecialties();
 }
