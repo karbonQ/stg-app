@@ -7,29 +7,21 @@ let attendanceChart;
 // تسجيل الدخول
 function login(){
 
-    const u = document.getElementById("username").value.trim();
-    const p = document.getElementById("password").value.trim();
+let username = document.getElementById("username").value.trim();
+let password = document.getElementById("password").value.trim();
 
-    if(u===userData.username && p===userData.password){
+if(username === "admin" && password === "1234"){
 
-        alert("تم تسجيل الدخول بنجاح ✅");
+document.getElementById("loginPage").style.display = "none";
+document.getElementById("app").style.display = "block";
 
-        document.body.classList.add("logged-in");
+alert("تم تسجيل الدخول بنجاح");
 
-        if(!Object.keys(specialties).length){
-            specialties = {"تلقين الإعلام الآلي":[]};
-            saveData();
-        }
+}else{
 
-        loadSpecialties();
-        renderAttendance();
-        renderChart();
+alert("اسم المستخدم أو كلمة المرور غير صحيحة");
 
-    }else{
-
-        alert("اسم المستخدم أو كلمة المرور خاطئ ❌");
-
-    }
+}
 
 }
 
