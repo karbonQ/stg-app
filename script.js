@@ -161,26 +161,51 @@ function markAttendance(status){
 // عرض آخر السجلات
 function renderAttendance(){
 
-    attendanceList.innerHTML="";
+    attendanceList.innerHTML = "";
 
-    records.slice(-10).reverse().forEach((r,index)=>{
+    const currentSpecialty = specialtySelect.value;
 
-        let realIndex = records.length - 1 - index;
+    const filtered = records.filter(r => r.specialty === currentSpecialty);
 
-        let li = document.createElement("li");
+    // تجميع السجلات حسب التاريخ
+    let grouped = {};
 
-        let statusColor = r.status === "حاضر" ? "green" : "red";
+    filtered.forEach(r=>{
+        if(!grouped[r.date]){
+            grouped[r.date] = [];
+        }
+        grouped[r.date].push(r);
+    });
 
-        li.innerHTML = `
-        ${r.date} | ${r.specialty} | ${r.name} | 
-        <b style="color:${statusColor}">${r.status}</b>
+    // ترتيب التواريخ
+    const dates = Object.keys(grouped).reverse();
 
-        <button onclick="toggleStatus(${realIndex})">
-        🔁
-        </button>
-        `;
+    dates.forEach(date=>{
 
-        attendanceList.appendChild(li);
+        let title = document.createElement("h3");
+        title.innerHTML = "📅 " + date;
+        attendanceList.appendChild(title);
+
+        grouped[date].forEach(r=>{
+
+            let li = document.createElement("li");
+
+            let color = r.status === "حاضر" ? "green" : "red";
+
+            let index = records.indexOf(r);
+
+            li.innerHTML = `
+            ${r.name} 
+            <span style="color:${color};font-weight:bold">
+            ${r.status}
+            </span>
+
+            <button onclick="toggleStatus(${index})">🔁</button>
+            `;
+
+            attendanceList.appendChild(li);
+
+        });
 
     });
 
@@ -337,7 +362,6 @@ function clearDayRecords(){
     if(!confirm("هل تريد حذف سجلات هذا اليوم؟")){
         return;
     }
-
     // تحويل التاريخ الى الصيغة الثانية
     const parts = selectedDate.split("-");
     const altDate = parts.reverse().join("-");
@@ -350,4 +374,4 @@ function clearDayRecords(){
 
     alert("تم حذف سجلات هذا اليوم");
 }
-
+specialtySelect.addEventListener("change", renderAttendance);
