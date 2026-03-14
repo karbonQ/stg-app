@@ -17,6 +17,21 @@ body{
 }
 
 /* نافذة تسجيل الدخول */
+#loginPage{
+display:flex;
+}
+
+#app{
+display:none;
+}
+
+body.logged-in #loginPage{
+display:none;
+}
+
+body.logged-in #app{
+display:block;
+}
 #loginContainer{
     width:95%;
     max-width:400px;
