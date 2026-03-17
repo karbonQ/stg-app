@@ -29,7 +29,7 @@ input,select,button{
 button{
     cursor:pointer;
     background:#ffffff;
-    color:#333;
+   // color:#333;
     border:none;
     transition:0.3s;
 }
