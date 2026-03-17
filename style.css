@@ -5,8 +5,11 @@ body{
     background:#f5f5f5;
     direction: rtl;
 }
+
 h1,h2,h3{
-    margin:10px 0;
+    text-align:center;
+    color:#0B6E4F;
+    margin:5px 0;
 }
 }
 
