@@ -28,7 +28,7 @@ input,select,button{
 }
 button{
     cursor:pointer;
-    background:#3498db;
+    background:#ffffff;
     color:white;
     border:none;
     transition:0.3s;
@@ -47,7 +47,6 @@ button:hover{
 .presentBtn:hover{
     background:#27ae60;
 }
-
 .absentBtn{
     background:#e74c3c;
 }
@@ -60,7 +59,6 @@ button:hover{
     height:250px;
     margin:auto;
 }
-
 ul#attendanceList{
     list-style:none;
     padding:0;
