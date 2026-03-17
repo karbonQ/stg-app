@@ -28,7 +28,7 @@ input,select,button{
 }
 button{
     cursor:pointer;
-    background:#ffffff;
+    background:#3498db;
   color:333;
     border:none;
     transition:0.3s;
