@@ -5,20 +5,18 @@ body{
     background: #0B6E4F;
     direction: rtl;
 }
-
 h1,h2,h3{
     text-align:center;
 }
-
 .container{
     max-width:700px;
     margin:auto;
     padding:20px;
-    background:#fff;
+    background:#ffffff;
+    color:#333;
     box-shadow:0 0 10px rgba(0,0,0,0.1);
     border-radius:10px;
 }
-
 input,select,button{
     margin:5px 0;
     padding:10px;
@@ -28,7 +26,6 @@ input,select,button{
     box-sizing:border-box;
     font-family:'Cairo',sans-serif;
 }
-
 button{
     cursor:pointer;
     background:#3498db;
@@ -36,17 +33,14 @@ button{
     border:none;
     transition:0.3s;
 }
-
 button:hover{
     background:#2980b9;
 }
-
 .actions button{
     width:30%;
     display:inline-block;
     margin-right:2%;
 }
-
 .presentBtn{
     background:#2ecc71;
 }
@@ -60,7 +54,6 @@ button:hover{
 .absentBtn:hover{
     background:#c0392b;
 }
-
 .chartBox{
     width:100%;
     max-width:500px;
@@ -72,14 +65,12 @@ ul#attendanceList{
     list-style:none;
     padding:0;
 }
-
 ul#attendanceList li{
     display:flex;
     justify-content:space-between;
     padding:5px;
     border-bottom:1px solid #eee;
 }
-
 #loginPage{
     display:flex;
     flex-direction:column;
