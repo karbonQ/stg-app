@@ -50,6 +50,11 @@ input,select,button{
 
 }
 
+.button-group{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+}
 button:hover{
     background:#2980b9;
 }
