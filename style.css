@@ -34,12 +34,20 @@ input,select,button{
     font-family:'Cairo',sans-serif;
 }
 
-button{
-    cursor:pointer;
-    background:#3498db;
-    color:white;
+
+  button{
+    margin:5px;
+    padding:10px 15px;
+    border-radius:10px;
     border:none;
+    background:#0B6E4F;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
     transition:0.3s;
+    width:auto; /* مهم */
+    display:inline-block;
+
 }
 
 button:hover{
