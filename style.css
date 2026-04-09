@@ -93,13 +93,15 @@ ul#attendanceList{
 
 
    #attendanceList li {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
+        display: grid;
+    grid-template-columns: 2fr 1fr auto;
     align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    background: #f9f9f9;
+    border-radius: 6px;
 }
-
-}
-
+ 
 #loginPage{
     display:flex;
     flex-direction:column;
