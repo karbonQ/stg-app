@@ -92,10 +92,14 @@ ul#attendanceList{
 }
 
 ul#attendanceList li{
-    display:flex;
-    justify-content:space-between;
-    padding:5px;
-    border-bottom:1px solid #eee;
+    display: flex;
+    justify-content: space-between; /* توزيع العناصر */
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    background: #f9f9f9;
+    border-radius: 6px;
+
 }
 
 #loginPage{
