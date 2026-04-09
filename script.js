@@ -209,8 +209,13 @@ function renderAttendance(){
             let li=document.createElement("li");
             let color=r.status==="حاضر"?"green":"red";
             let idx=records.indexOf(r);
-            li.innerHTML=`${r.name} <span style="color:${color};font-weight:bold">${r.status}</span> <button onclick="toggleStatus(${idx})">🔁</button>`;
-            attendanceList.appendChild(li);
+li.innerHTML = `
+    <span class="name">${record.name}</span>
+    <span class="status ${record.status === "حاضر" ? "present" : "absent"}">
+        ${record.status}
+    </span>
+    <button class="actionBtn">🔁</button>
+`;            attendanceList.appendChild(li);
         });
     });
 }
