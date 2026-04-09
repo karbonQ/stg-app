@@ -91,14 +91,12 @@ ul#attendanceList{
     padding:0;
 }
 
-ul#attendanceList li{
-    display: flex;
-    justify-content: space-between; /* توزيع العناصر */
+
+   #attendanceList li {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
     align-items: center;
-    padding: 10px;
-    margin-bottom: 5px;
-    background: #f9f9f9;
-    border-radius: 6px;
+}
 
 }
 
