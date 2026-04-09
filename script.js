@@ -148,15 +148,28 @@ function deleteTrainee(){
 
 // تسجيل حضور او غياب
 function markAttendance(status){
-    let name=traineeSelect.value;
-    let spec=specialtySelect.value;
-    let date=document.getElementById("attendanceDate").value;
-    if(!name || !date){ alert("اختر المتربص والتاريخ"); return; }
-    records.push({name:name, specialty:spec, status:status, date:date});
-    saveData();
-    renderAttendance();
-    renderChart();
+    let name = traineeSelect.value;
+    let spec = specialtySelect.value;
+    let date = document.getElementById("attendanceDate").value;
+
+    if(!name || !spec || !date){
+        alert("يرجى ملء جميع الحقول");
+        return;
+    }
+
+    // إضافة السجل
+    records.push({
+        name: name,
+        specialty: spec,
+        status: status,
+        date: date
+    });
+
+    localStorage.setItem("attendance", JSON.stringify(records));
+
+    renderChart();   // 🔥 تحديث مباشر للرسم
 }
+
 
 // مسح سجلات يوم
 function clearDayRecords(){
@@ -261,3 +274,35 @@ specialtySelect.addEventListener("change",()=>{
     renderAttendance();
     renderChart();
 });
+
+function getWeeklyStats(spec){
+    let today = new Date();
+    let weekAgo = new Date();
+    weekAgo.setDate(today.getDate() - 7);
+
+    let filtered = records.filter(r => {
+        let d = new Date(r.date);
+        return r.specialty === spec && d >= weekAgo && d <= today;
+    });
+
+    return {
+        present: filtered.filter(r => r.status === "حاضر").length,
+        absent: filtered.filter(r => r.status === "غائب").length
+    };
+}
+
+function getMonthlyStats(spec){
+    let today = new Date();
+
+    let filtered = records.filter(r => {
+        let d = new Date(r.date);
+        return r.specialty === spec &&
+               d.getMonth() === today.getMonth() &&
+               d.getFullYear() === today.getFullYear();
+    });
+
+    return {
+        present: filtered.filter(r => r.status === "حاضر").length,
+        absent: filtered.filter(r => r.status === "غائب").length
+    };
+}
