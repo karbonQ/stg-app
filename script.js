@@ -216,17 +216,35 @@ function renderAttendance(){
 }
 
 // الرسم البياني Histogram
+
 function renderChart(){
     let spec = specialtySelect.value;
+    let type = document.getElementById("statsType").value;
     let selectedDate = document.getElementById("attendanceDate").value;
 
-    // فلترة حسب التخصص + التاريخ
-    let filtered = records.filter(r =>
-        r.specialty === spec && r.date === selectedDate
-    );
+    let present = 0;
+    let absent = 0;
 
-    let present = filtered.filter(r => r.status === "حاضر").length;
-    let absent = filtered.filter(r => r.status === "غائب").length;
+    if(type === "day"){
+        let filtered = records.filter(r =>
+            r.specialty === spec && r.date === selectedDate
+        );
+
+        present = filtered.filter(r => r.status === "حاضر").length;
+        absent = filtered.filter(r => r.status === "غائب").length;
+    }
+
+    else if(type === "week"){
+        let stats = getWeeklyStats(spec);
+        present = stats.present;
+        absent = stats.absent;
+    }
+
+    else if(type === "month"){
+        let stats = getMonthlyStats(spec);
+        present = stats.present;
+        absent = stats.absent;
+    }
 
     let ctx = document.getElementById("attendanceChart");
 
@@ -237,18 +255,16 @@ function renderChart(){
         data:{
             labels:["حضور","غياب"],
             datasets:[{
-                label:"عدد المتربصين",
                 data:[present, absent],
                 backgroundColor:["#2ecc71","#e74c3c"]
             }]
-        },
-        options:{
-            responsive:true,
-            plugins:{legend:{display:false}},
-            scales:{y:{beginAtZero:true, ticks:{precision:0}}}
         }
     });
 }
+
+
+
+
 document.getElementById("attendanceDate")
     .addEventListener("change", renderChart);
 
@@ -306,3 +322,8 @@ function getMonthlyStats(spec){
         absent: filtered.filter(r => r.status === "غائب").length
     };
 }
+document.getElementById("attendanceDate")
+    .addEventListener("change", renderChart);
+
+document.getElementById("statsType")
+    .addEventListener("change", renderChart);
