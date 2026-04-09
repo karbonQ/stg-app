@@ -204,19 +204,28 @@ function renderAttendance(){
 
 // الرسم البياني Histogram
 function renderChart(){
-    let spec=specialtySelect.value;
-    let filtered=records.filter(r=>r.specialty===spec);
-    let present=filtered.filter(r=>r.status==="حاضر").length;
-    let absent=filtered.filter(r=>r.status==="غائب").length;
-    let ctx=document.getElementById("attendanceChart");
+    let spec = specialtySelect.value;
+    let selectedDate = document.getElementById("attendanceDate").value;
+
+    // فلترة حسب التخصص + التاريخ
+    let filtered = records.filter(r =>
+        r.specialty === spec && r.date === selectedDate
+    );
+
+    let present = filtered.filter(r => r.status === "حاضر").length;
+    let absent = filtered.filter(r => r.status === "غائب").length;
+
+    let ctx = document.getElementById("attendanceChart");
+
     if(attendanceChart) attendanceChart.destroy();
-    attendanceChart=new Chart(ctx,{
+
+    attendanceChart = new Chart(ctx,{
         type:"bar",
         data:{
             labels:["حضور","غياب"],
             datasets:[{
                 label:"عدد المتربصين",
-                data:[present,absent],
+                data:[present, absent],
                 backgroundColor:["#2ecc71","#e74c3c"]
             }]
         },
@@ -227,6 +236,8 @@ function renderChart(){
         }
     });
 }
+document.getElementById("attendanceDate")
+    .addEventListener("change", renderChart);
 
 // تصدير CSV
 function exportCSV(){
