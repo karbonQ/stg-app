@@ -147,27 +147,33 @@ function deleteTrainee(){
 }
 
 // تسجيل حضور او غياب
-function markAttendance(status){
-    let name = traineeSelect.value;
-    let spec = specialtySelect.value;
-    let date = document.getElementById("attendanceDate").value;
+function markAttendance(status) {
+    const name = document.getElementById('nameInput').value;
+    const specialty = document.getElementById('specialtySelect').value;
+    const date = document.getElementById('attendanceDate').value;
 
-    if(!name || !spec || !date){
-        alert("يرجى ملء جميع الحقول");
+    if (!name || !date) {
+        alert("يرجى اختيار المتربص والتاريخ");
         return;
     }
 
-    // إضافة السجل
-    records.push({
+    const record = {
+        id: Date.now(), // معرف فريد لكل سجل
         name: name,
-        specialty: spec,
-        status: status,
-        date: date
-    });
+        specialty: specialty,
+        date: date,
+        status: status
+    };
 
-    localStorage.setItem("attendance", JSON.stringify(records));
+    // إضافة السجل للمصفوفة
+    attendanceRecords.push(record);
+    
+    // حفظ في الذاكرة
+    localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
 
-    renderChart();   // 🔥 تحديث مباشر للرسم
+    // تحديث الجدول فوراً
+    updateDailyRecordsTable();
+    alert("تم تسجيل " + status);
 }
 
 
@@ -332,24 +338,30 @@ function getMonthlyStats(spec){
 // وظيفة لعرض سجلات اليوم في الجدول
 function updateDailyRecordsTable() {
     const tableBody = document.getElementById('dailyRecordsTable');
-    const selectedDate = document.getElementById('attendanceDate').value; // التاريخ المختار حالياً
+    const selectedDate = document.getElementById('attendanceDate').value;
     
-    tableBody.innerHTML = ''; // مسح الجدول قبل إعادة التعبئة
+    if (!tableBody) return; // حماية في حال لم يجد الجدول
 
-    // تصفية السجلات لتظهر سجلات التاريخ المختار فقط
+    tableBody.innerHTML = ''; 
+
+    // فلترة السجلات حسب التاريخ المختار
     const todayRecords = attendanceRecords.filter(record => record.date === selectedDate);
 
-    todayRecords.forEach((record, index) => {
+    if (todayRecords.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="3">لا توجد سجلات لهذا التاريخ</td></tr>';
+        return;
+    }
+
+    todayRecords.forEach((record) => {
         const row = document.createElement('tr');
-        
-        // لون الحالة
-        const statusColor = record.status === 'حاضر' ? 'green' : 'red';
+        const statusClass = record.status === 'حاضر' ? 'present-text' : 'absent-text';
 
         row.innerHTML = `
             <td>${record.name}</td>
-            <td style="color: ${statusColor}; font-weight: bold;">${record.status}</td>
+            <td class="${statusClass}">${record.status}</td>
             <td>
-                <button onclick="toggleStatus('${record.id}')">تبديل الحالة</button>
+                <button class="edit-btn" onclick="toggleStatus(${record.id})">تبديل</button>
+                <button class="delete-btn" onclick="deleteRecord(${record.id})">حذف</button>
             </td>
         `;
         tableBody.appendChild(row);
@@ -357,20 +369,24 @@ function updateDailyRecordsTable() {
 }
 
 // وظيفة لتبديل الحالة من غائب إلى حاضر والعكس
-function toggleStatus(recordId) {
+function toggleStatus(id) {
     attendanceRecords = attendanceRecords.map(record => {
-        if (record.id === recordId) {
+        if (record.id === id) {
             record.status = (record.status === 'حاضر') ? 'غائب' : 'حاضر';
         }
         return record;
     });
 
-    // حفظ التعديلات في LocalStorage
     localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
-    
-    // تحديث الجدول والرسم البياني فوراً
-    updateDailyRecordsTable();
-    if (typeof updateChart === "function") updateChart(); 
+    updateDailyRecordsTable(); // تحديث العرض فوراً
+}
+
+function deleteRecord(id) {
+    if(confirm("هل أنت متأكد من حذف هذا السجل؟")) {
+        attendanceRecords = attendanceRecords.filter(record => record.id !== id);
+        localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
+        updateDailyRecordsTable();
+    }
 }
 
 // استدعاء الوظيفة عند تغيير التاريخ
@@ -382,3 +398,11 @@ document.getElementById("attendanceDate")
 
 document.getElementById("statsType")
     .addEventListener("change", renderChart);
+// تشغيل العرض الأولي عند تحميل الصفحة
+window.onload = function() {
+    // تعيين تاريخ اليوم كقيمة افتراضية
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('attendanceDate').value = today;
+    
+    updateDailyRecordsTable();
+};
