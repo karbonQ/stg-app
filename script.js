@@ -157,13 +157,13 @@ function markAttendance(status) {
         return;
     }
 
-    const record = {
-        id: Date.now(), // معرف فريد لكل سجل
-        name: name,
-        specialty: specialty,
-        date: date,
-        status: status
-    };
+    // مثال لشكل السجل الصحيح داخل وظيفة الإضافة
+const newRecord = {
+    id: Date.now(), // هذا هو المفتاح الذي نستخدمه للتعديل
+    name: nameValue,
+    date: dateValue,
+    status: statusValue
+};
 
     // إضافة السجل للمصفوفة
     attendanceRecords.push(record);
@@ -174,6 +174,7 @@ function markAttendance(status) {
     // تحديث الجدول فوراً
     updateDailyRecordsTable();
     alert("تم تسجيل " + status);
+    updateDailyRecordsTable(); // لكي يظهر الاسم في الجدول فور ضغطك على زر "حضور" أو "غياب"
 }
 
 
@@ -336,36 +337,59 @@ function getMonthlyStats(spec){
 
 
 // وظيفة لعرض سجلات اليوم في الجدول
+// وظيفة عرض الجدول - تأكد من استدعائها في نهاية وظيفة markAttendance
 function updateDailyRecordsTable() {
     const tableBody = document.getElementById('dailyRecordsTable');
     const selectedDate = document.getElementById('attendanceDate').value;
     
-    if (!tableBody) return; // حماية في حال لم يجد الجدول
-
+    // جلب البيانات من LocalStorage لضمان أننا نقرأ أحدث نسخة
+    let currentRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+    
     tableBody.innerHTML = ''; 
 
-    // فلترة السجلات حسب التاريخ المختار
-    const todayRecords = attendanceRecords.filter(record => record.date === selectedDate);
+    // تصفية السجلات حسب التاريخ المختارة
+    const filtered = currentRecords.filter(r => r.date === selectedDate);
 
-    if (todayRecords.length === 0) {
+    if (filtered.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="3">لا توجد سجلات لهذا التاريخ</td></tr>';
         return;
     }
 
-    todayRecords.forEach((record) => {
+    filtered.forEach((record) => {
         const row = document.createElement('tr');
-        const statusClass = record.status === 'حاضر' ? 'present-text' : 'absent-text';
-
+        // تحديد لون النص: أخضر للحاضر وأحمر للغائب
+        const color = record.status === 'حاضر' ? '#28a745' : '#dc3545';
+        
         row.innerHTML = `
-            <td>${record.name}</td>
-            <td class="${statusClass}">${record.status}</td>
-            <td>
-                <button class="edit-btn" onclick="toggleStatus(${record.id})">تبديل</button>
-                <button class="delete-btn" onclick="deleteRecord(${record.id})">حذف</button>
+            <td style="padding:10px; border:1px solid #ddd;">${record.name}</td>
+            <td style="padding:10px; border:1px solid #ddd; color:${color}; font-weight:bold;">${record.status}</td>
+            <td style="padding:10px; border:1px solid #ddd;">
+                <button onclick="toggleStatus('${record.id}')" style="cursor:pointer; padding:5px 10px;">تبديل الحالة</button>
             </td>
         `;
         tableBody.appendChild(row);
     });
+}
+
+// وظيفة التبديل الذكية
+function toggleStatus(recordId) {
+    // 1. جلب البيانات الحالية
+    let allRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+    
+    // 2. تحديث الحالة للسجل المطلوب
+    allRecords = allRecords.map(record => {
+        // نستخدم == للمقارنة لأن ID قد يكون نصاً أو رقماً
+        if (record.id == recordId) {
+            record.status = (record.status === 'حاضر') ? 'غائب' : 'حاضر';
+        }
+        return record;
+    });
+
+    // 3. حفظ البيانات المحدثة فوراً
+    localStorage.setItem('attendanceRecords', JSON.stringify(allRecords));
+    
+    // 4. إعادة رسم الجدول ليرى المستخدم التغيير
+    updateDailyRecordsTable();
 }
 
 // وظيفة لتبديل الحالة من غائب إلى حاضر والعكس
