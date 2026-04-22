@@ -1,6 +1,6 @@
 // بيانات تسجيل الدخول
 const userData = {username:"admin", password:"1234"};
-
+let attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
 // الرسم البياني
 let attendanceChart;
 
@@ -327,6 +327,56 @@ function getMonthlyStats(spec){
         absent: filtered.filter(r => r.status === "غائب").length
     };
 }
+
+
+// وظيفة لعرض سجلات اليوم في الجدول
+function updateDailyRecordsTable() {
+    const tableBody = document.getElementById('dailyRecordsTable');
+    const selectedDate = document.getElementById('attendanceDate').value; // التاريخ المختار حالياً
+    
+    tableBody.innerHTML = ''; // مسح الجدول قبل إعادة التعبئة
+
+    // تصفية السجلات لتظهر سجلات التاريخ المختار فقط
+    const todayRecords = attendanceRecords.filter(record => record.date === selectedDate);
+
+    todayRecords.forEach((record, index) => {
+        const row = document.createElement('tr');
+        
+        // لون الحالة
+        const statusColor = record.status === 'حاضر' ? 'green' : 'red';
+
+        row.innerHTML = `
+            <td>${record.name}</td>
+            <td style="color: ${statusColor}; font-weight: bold;">${record.status}</td>
+            <td>
+                <button onclick="toggleStatus('${record.id}')">تبديل الحالة</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// وظيفة لتبديل الحالة من غائب إلى حاضر والعكس
+function toggleStatus(recordId) {
+    attendanceRecords = attendanceRecords.map(record => {
+        if (record.id === recordId) {
+            record.status = (record.status === 'حاضر') ? 'غائب' : 'حاضر';
+        }
+        return record;
+    });
+
+    // حفظ التعديلات في LocalStorage
+    localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
+    
+    // تحديث الجدول والرسم البياني فوراً
+    updateDailyRecordsTable();
+    if (typeof updateChart === "function") updateChart(); 
+}
+
+// استدعاء الوظيفة عند تغيير التاريخ
+document.getElementById('attendanceDate').addEventListener('change', updateDailyRecordsTable);
+
+// تأكد من استدعاء updateDailyRecordsTable() داخل وظيفة markAttendance() الأصلية لديك
 document.getElementById("attendanceDate")
     .addEventListener("change", renderChart);
 
